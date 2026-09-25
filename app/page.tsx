@@ -122,39 +122,6 @@ export default async function Home() {
 
       <DailyPsalmCard reading={dailyReading} chileDate={chileDate} amenCount={amenCount} />
 
-      {/* ========================================================
-          3. BANNER OFICIAL DE WHATSAPP (Verde bosque)
-      ======================================================== */}
-      <section className="px-4 mt-6 max-w-5xl mx-auto w-full">
-        <div className="bg-[#0e3f2d] text-white rounded-2xl p-4 sm:p-5 border border-[#19523c] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
-          <div className="flex items-center gap-3.5 text-center sm:text-left">
-            <Image 
-              src="/icon-email.png"
-              alt="Correo electrónico" 
-              width={40} 
-              height={40}
-              className="w-10 h-10 object-contain brightness-0 invert shrink-0 mx-auto sm:mx-0"
-            />
-            <div>
-              <h3 className="font-bold text-white text-sm sm:text-base leading-snug">
-                Oración matutina por correo
-              </h3>
-              <p className="text-xs text-emerald-200/90 leading-relaxed mt-0.5">
-                Recibe una lectura, reflexión y oración diaria en tu correo después de confirmar tu dirección.
-              </p>
-            </div>
-          </div>
-
-          <a
-            href="#oraciones-correo"
-            className="shrink-0 bg-white hover:bg-stone-100 text-[#0e3f2d] font-bold text-xs py-2.5 px-5 rounded-full transition-colors shadow-sm"
-          >
-            Suscribirme →
-          </a>
-        </div>
-      </section>
-
-
       <section className="px-4 mt-4 max-w-5xl mx-auto w-full">
         <div className="bg-[#f0f7f1] text-stone-900 rounded-2xl p-4 sm:p-5 border border-emerald-900/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3.5 text-center sm:text-left">
@@ -298,7 +265,6 @@ export default async function Home() {
           <p className="text-stone-600 text-xs sm:text-sm mb-6 leading-relaxed">
             Recibe en tu correo el versículo del día, una breve meditación y la oración guiada antes de salir al trabajo o iniciar tus tareas.
           </p>
-
           <NewsletterSignup />
 
         </div>

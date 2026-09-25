@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import CheckoutButton from '@/components/CheckoutButton';
+import LeadMagnetForm from '@/components/LeadMagnetForm';
 
 export const metadata = {
   title: 'Devocionales y lecturas',
@@ -59,20 +60,11 @@ export default async function Productos({ searchParams }: { searchParams: Promis
               Siete Salmos para la inquietud y el descanso
             </h2>
             <p className="text-stone-600 text-sm leading-relaxed max-w-xl">
-              Una recopilación breve para leer en el teléfono durante noches de desvelo o momentos de agobio. Puedes descargarla ingresando tu correo.
+              Una recopilación breve para leer en el teléfono durante noches de desvelo o momentos de agobio. Enviaremos el enlace privado a tu correo.
             </p>
           </div>
 
-          <div className="w-full md:w-auto shrink-0 text-center">
-            <a
-              href="/resources/siete-salmos-para-el-descanso.pdf"
-              download
-              className="inline-flex justify-center bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-5 rounded-lg text-sm transition-colors"
-            >
-              Descargar PDF gratuito
-            </a>
-            <p className="text-[11px] text-stone-500 mt-2">No necesitas compartir tu correo.</p>
-          </div>
+          <LeadMagnetForm />
         </div>
       </section>
 

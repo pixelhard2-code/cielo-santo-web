@@ -20,6 +20,10 @@ export default function PrivacidadPage() {
         <p>Si marcas la casilla de suscripción, guardamos tu correo y la fecha de consentimiento. Te enviaremos un mensaje de confirmación antes de activar el envío diario. Puedes darte de baja desde cada correo; al hacerlo, se detienen los envíos.</p>
       </section>
       <section>
+        <h2 className="font-serif text-xl font-bold text-stone-900 mb-2">Libro gratuito</h2>
+        <p>Si solicitas el libro de siete Salmos, usamos tu correo para enviarte el enlace privado de descarga. Esta solicitud no te suscribe al correo diario. Conservamos la dirección hasta 90 días para atender el envío y luego la eliminamos automáticamente.</p>
+      </section>
+      <section>
         <h2 className="font-serif text-xl font-bold text-stone-900 mb-2">Pagos y descargas</h2>
         <p>Los pagos se procesan en Stripe o Mercado Pago. No recibimos ni almacenamos los datos de tu tarjeta. Guardamos los datos mínimos de la operación —correo, monto, moneda, categoría y referencia del proveedor— para confirmar el pago y entregar el recurso o registrar el aporte. El archivo comprado se guarda en un bucket privado; los enlaces de descarga vencen a las 72 horas.</p>
       </section>

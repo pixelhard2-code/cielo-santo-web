@@ -118,8 +118,8 @@ Abre tu navegador en [http://localhost:3000](http://localhost:3000).
 
 La interfaz se mantiene en modo de disponibilidad limitada hasta completar estos pasos; no simula confirmaciones ni pagos.
 
-1. Ejecuta la migración `supabase/migrations/20260925000000_trust_and_billing.sql` en el SQL Editor de Supabase. Usa una llave `service_role` solo como variable de entorno del servidor; nunca la publiques como `NEXT_PUBLIC_*`.
-2. En Supabase Storage, sube `private-resources/treinta-dias-con-los-salmos.pdf` al bucket privado `paid-resources` con ese mismo nombre. El endpoint de descarga genera un enlace firmado válido por 72 horas.
+1. Ejecuta las migraciones de `supabase/migrations/` en el SQL Editor de Supabase. Usa una llave `service_role` solo como variable de entorno del servidor; nunca la publiques como `NEXT_PUBLIC_*`.
+2. En Supabase Storage, sube `private-resources/treinta-dias-con-los-salmos.pdf` y `private-resources/siete-salmos-para-el-descanso.pdf` al bucket privado `paid-resources` con esos mismos nombres. El devocional de pago se entrega con un enlace válido por 72 horas; el libro gratuito se envía al correo que lo solicita con un enlace válido por 48 horas. La dirección del libro gratuito se elimina a los 90 días y no activa la suscripción diaria.
 3. Configura Stripe para escuchar `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid` y `invoice.payment_failed` en `/api/webhooks/stripe`. Habilita el portal de cliente en Stripe para gestionar/cancelar suscripciones.
 4. Configura el webhook de Mercado Pago en `/api/webhooks/mercadopago` y guarda su secreto en `MP_WEBHOOK_SECRET`.
 5. Verifica el dominio remitente en Resend y configura `RESEND_FROM_EMAIL`.
