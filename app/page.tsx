@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import AudioPlayer from '@/components/AudioPlayer';
 import ResumenSemanalModal from '@/components/ResumenSemanalModal';
 
 interface Peticion {
@@ -256,13 +255,13 @@ export default function Home() {
     <main className="flex flex-col min-h-screen">
       
       {/* ========================================================
-          1. HERO SECTION (Idéntico a la imagen con fondo hero-bg.png)
+          1. HERO SECTION
       ======================================================== */}
-      <section className="relative w-full min-h-[640px] md:min-h-[700px] flex items-center px-6 sm:px-12 py-20 text-white overflow-hidden">
+      <section className="relative w-full min-h-[600px] flex items-center px-6 sm:px-12 py-20 text-white overflow-hidden">
         {/* Fondo panorámico con montañas y pinos */}
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/hero-bg.png" 
+            src="/hero-prayer.png"
             alt="Amanecer en las montañas" 
             fill
             priority
@@ -272,12 +271,13 @@ export default function Home() {
           {/* Sutil viñeta para asegurar legibilidad */}
           <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-stone-950/40 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-stone-950/30 via-transparent to-stone-950/70"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_88%_25%,rgba(255,196,112,0.3),transparent_24%)]"></div>
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto w-full flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
           
           {/* Bloque principal izquierdo */}
-          <div className="max-w-xl text-left">
+          <div className="max-w-2xl text-left">
             <p className="text-[#e2ab4b] text-[11px] md:text-xs font-semibold tracking-[0.2em] uppercase mb-4">
               Comunidad de oración cotidiana
             </p>
@@ -333,12 +333,12 @@ export default function Home() {
       {/* ========================================================
           2. TARJETA FLOTANTE: "SALMO DEL DÍA"
       ======================================================== */}
-      <section id="salmo-del-dia" className="relative -mt-20 z-20 px-4 max-w-4xl mx-auto w-full">
+      <section id="salmo-del-dia" className="relative -mt-20 z-20 px-4 max-w-5xl mx-auto w-full">
         
         {/* Hojas decorativas de olivo a la izquierda (exactas a la imagen) */}
         <div className="absolute -left-12 -top-8 w-28 h-auto pointer-events-none hidden lg:block opacity-85">
           <Image 
-            src="/leaf-1.png" 
+            src="/leaf-decoration.svg"
             alt="Rama de olivo decorativa" 
             width={120} 
             height={90}
@@ -353,13 +353,7 @@ export default function Home() {
             <div className="w-16 hidden sm:block"></div>
             
             <div className="flex items-center justify-center gap-2 mx-auto">
-              <Image 
-                src="/icon-book.png" 
-                alt="Libro" 
-                width={22} 
-                height={22}
-                className="w-5 h-5 object-contain"
-              />
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-[#b77922]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 7v14m0-14C10.7 6 9 5.5 7 5.5c-1.7 0-3 .4-4 1.1v13c1-.7 2.3-1.1 4-1.1 2 0 3.7.5 5 1.5m0-13c1.3-1 3-1.5 5-1.5 1.7 0 3 .4 4 1.1v13c-1-.7-2.3-1.1-4-1.1-2 0-3.7.5-5 1.5"/></svg>
               <h2 className="font-serif font-bold text-stone-900 text-lg sm:text-xl tracking-tight">
                 Salmo del día
               </h2>
@@ -382,15 +376,9 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 gap-4 text-left mb-6">
             
             {/* Columna Reflexión */}
-            <div className="bg-[#faf7f2] p-5 rounded-xl border border-[#efe9dd]">
+            <div className="bg-[#f1f5ef] p-5 rounded-xl border border-[#e4eadf]">
               <div className="flex items-center gap-2 mb-2">
-                <Image 
-                  src="/icon-book.png" 
-                  alt="Reflexión" 
-                  width={16} 
-                  height={16} 
-                  className="w-4 h-4 object-contain opacity-80"
-                />
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-[#55705b]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 7v14m0-14C10.7 6 9 5.5 7 5.5c-1.7 0-3 .4-4 1.1v13c1-.7 2.3-1.1 4-1.1 2 0 3.7.5 5 1.5m0-13c1.3-1 3-1.5 5-1.5 1.7 0 3 .4 4 1.1v13c-1-.7-2.3-1.1-4-1.1-2 0-3.7.5-5 1.5"/></svg>
                 <h3 className="font-serif font-bold text-stone-900 text-sm">Reflexión</h3>
               </div>
               <p className="text-stone-700 text-xs sm:text-sm leading-relaxed">
@@ -399,15 +387,9 @@ export default function Home() {
             </div>
 
             {/* Columna Oración de hoy */}
-            <div className="bg-[#faf7f2] p-5 rounded-xl border border-[#efe9dd]">
+            <div className="bg-[#faf5eb] p-5 rounded-xl border border-[#efe6d5]">
               <div className="flex items-center gap-2 mb-2">
-                <Image 
-                  src="/icon-pray.png" 
-                  alt="Oración" 
-                  width={16} 
-                  height={16} 
-                  className="w-4 h-4 object-contain opacity-80"
-                />
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-[#b77922]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21V9m0 0c-1-2-2.3-3-4-3-1.3 0-2.3.7-2.8 1.8L4 10l4 4m4-5c1-2 2.3-3 4-3 1.3 0 2.3.7 2.8 1.8L20 10l-4 4m-4-5L9 4m3 5 3-5m-7 9 3 3m6-3-3 3"/></svg>
                 <h3 className="font-serif font-bold text-stone-900 text-sm">Oración de hoy</h3>
               </div>
               <p className="text-stone-700 text-xs sm:text-sm leading-relaxed italic">
@@ -453,15 +435,15 @@ export default function Home() {
       {/* ========================================================
           3. BANNER OFICIAL DE WHATSAPP (Verde bosque)
       ======================================================== */}
-      <section className="px-4 mt-6 max-w-4xl mx-auto w-full">
+      <section className="px-4 mt-6 max-w-5xl mx-auto w-full">
         <div className="bg-[#0e3f2d] text-white rounded-2xl p-4 sm:p-5 border border-[#19523c] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
           <div className="flex items-center gap-3.5 text-center sm:text-left">
             <Image 
-              src="/icon-whatsapp.png" 
+              src="/whatsapp.svg"
               alt="WhatsApp" 
               width={40} 
               height={40}
-              className="w-10 h-10 object-contain shrink-0 mx-auto sm:mx-0"
+              className="w-10 h-10 object-contain brightness-0 invert shrink-0 mx-auto sm:mx-0"
             />
             <div>
               <h3 className="font-bold text-white text-sm sm:text-base leading-snug">
@@ -496,9 +478,9 @@ export default function Home() {
             alt="Flores silvestres al atardecer" 
             fill
             sizes="100vw"
-            className="object-cover object-center opacity-40"
+            className="object-cover object-center opacity-60"
           />
-          <div className="absolute inset-0 bg-stone-950/75"></div>
+          <div className="absolute inset-0 bg-stone-950/65"></div>
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-12 gap-10 items-center">
@@ -567,18 +549,12 @@ export default function Home() {
       {/* ========================================================
           5. SECCIÓN: MURO DE LA COMUNIDAD
       ======================================================== */}
-      <section id="muro-oracion" className="py-20 px-4 max-w-4xl mx-auto w-full scroll-mt-20">
+      <section id="muro-oracion" className="py-20 px-4 max-w-5xl mx-auto w-full scroll-mt-20">
         
         {/* Encabezado del Muro con Icono Comunitario */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-1.5">
-            <Image 
-              src="/icon-community.png" 
-              alt="Comunidad" 
-              width={26} 
-              height={26} 
-              className="w-6 h-6 object-contain"
-            />
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="w-6 h-6 fill-none stroke-[#b77922]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="3"/><path d="M5.5 20v-1.5a6.5 6.5 0 0 1 13 0V20M4.5 10.5a2.5 2.5 0 0 0 0 5m15-5a2.5 2.5 0 0 1 0 5M2.5 20v-1a4 4 0 0 1 2-3.5m17 4.5v-1a4 4 0 0 0-2-3.5"/></svg>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900">
               Muro de la Comunidad
             </h2>
@@ -786,7 +762,7 @@ export default function Home() {
                   className="text-stone-600 hover:text-emerald-800 transition-colors inline-flex items-center gap-1.5 text-xs"
                 >
                   <Image 
-                    src="/icon-whatsapp.png" 
+                    src="/whatsapp.svg"
                     alt="WhatsApp" 
                     width={14} 
                     height={14} 
@@ -819,23 +795,13 @@ export default function Home() {
       ======================================================== */}
       <section className="relative py-20 px-6 text-center overflow-hidden bg-[#f4eee2] border-t border-[#e8dfce]">
         
-        {/* Hojas decorativas en los bordes laterales */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-28 h-auto pointer-events-none hidden md:block opacity-75">
+        {/* Rama de olivo decorativa */}
+        <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-40 h-auto pointer-events-none hidden md:block opacity-80">
           <Image 
-            src="/leaf-1.png" 
+            src="/leaf-decoration.svg"
             alt="Follaje" 
-            width={120} 
-            height={90} 
-            className="w-full h-auto object-contain"
-          />
-        </div>
-
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-28 h-auto pointer-events-none hidden md:block opacity-75">
-          <Image 
-            src="/leaf-2.png" 
-            alt="Follaje" 
-            width={120} 
-            height={90} 
+            width={400}
+            height={220}
             className="w-full h-auto object-contain"
           />
         </div>
@@ -843,11 +809,11 @@ export default function Home() {
         {/* Silueta de pinos y horizonte en la base, fundiéndose suavemente hacia la sección oscura */}
         <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 pointer-events-none overflow-hidden">
           <Image 
-            src="/hero-bg-alt2.png" 
+            src="/hero-prayer.png"
             alt="Pinos y horizonte al amanecer" 
             fill
             sizes="100vw"
-            className="object-cover object-bottom opacity-65"
+            className="object-cover object-[center_68%] opacity-35"
           />
           {/* Fusión suave desde el fondo pergamino superior hacia la base oscura */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#121110] via-[#f4eee2]/50 to-[#f4eee2]"></div>
@@ -855,14 +821,8 @@ export default function Home() {
 
         <div className="relative z-10 max-w-xl mx-auto">
           
-          <div className="w-8 h-8 mx-auto mb-2 opacity-85">
-            <Image 
-              src="/icon-email.png" 
-              alt="Email" 
-              width={32} 
-              height={32} 
-              className="w-full h-full object-contain"
-            />
+          <div className="w-8 h-8 mx-auto mb-2 text-[#b77922]">
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="w-full h-full fill-none stroke-current" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m4 7 8 6 8-6"/></svg>
           </div>
 
           <p className="text-[#a86518] text-[11px] font-semibold tracking-widest uppercase mb-1.5">
@@ -930,7 +890,7 @@ export default function Home() {
               <div>
                 <div className="relative aspect-video w-full overflow-hidden group">
                   <Image 
-                    src="/images/yt-thumb-manana.jpg" 
+                    src="/hero-prayer.png"
                     alt="Oración de la mañana" 
                     fill
                     sizes="(max-width: 768px) 100vw, 380px"
@@ -1088,9 +1048,6 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* Reproductor de Audio Flotante Sereno */}
-      <AudioPlayer />
 
       {/* Modal Guion Dominical para el creador */}
       <ResumenSemanalModal
