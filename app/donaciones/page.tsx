@@ -40,7 +40,7 @@ export default function Donaciones() {
       <section className="bg-stone-900 text-stone-100 pt-20 pb-28 px-5 text-center relative overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-40">
           <Image 
-            src="https://images.unsplash.com/photo-1443527216320-7e744084f5a7?q=80&w=2070&auto=format&fit=crop" 
+            src="/hero-bg-alt1.png" 
             alt="Luz de amanecer sobre montañas" 
             fill
             priority
@@ -69,13 +69,13 @@ export default function Donaciones() {
             className="relative rounded-xl overflow-hidden aspect-video bg-stone-800 flex items-center justify-center group cursor-pointer"
           >
             <Image 
-              src="https://images.unsplash.com/photo-1593113589914-075568e09166?q=80&w=2070&auto=format&fit=crop" 
-              alt="Comunidad reunida" 
+              src="/solidarity-community.jpg" 
+              alt="Comunidad reunida y ayuda solidaria" 
               fill
               sizes="(max-width: 1024px) 100vw, 896px"
-              className="object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
+              className="object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-stone-950/40 group-hover:bg-stone-950/30 transition-colors"></div>
+            <div className="absolute inset-0 bg-stone-950/40 group-hover:bg-stone-950/25 transition-colors"></div>
             
             <div className="relative z-10 w-16 h-16 bg-amber-800/90 rounded-full flex items-center justify-center text-white shadow-lg group-hover:bg-amber-700 transition-colors">
               <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -101,33 +101,59 @@ export default function Donaciones() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-7">
-          <div className="bg-white rounded-xl p-7 border border-stone-200 shadow-sm flex flex-col justify-between">
-            <div>
-              <p className="text-xs font-semibold text-amber-900 bg-amber-50 px-2.5 py-1 rounded border border-amber-200 inline-block mb-3">
-                Sostenimiento digital
-              </p>
-              <h3 className="text-xl font-serif font-bold text-stone-900 mb-3">Infraestructura y producción</h3>
-              <p className="text-stone-600 text-sm leading-relaxed mb-6">
-                Permite costear los servidores web, el software de distribución de correos diarios, el almacenamiento en la nube y el equipo de audio y edición para mantener las oraciones libres de anuncios invasivos.
-              </p>
+          <div className="bg-white rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between overflow-hidden">
+            <div className="relative h-44 w-full">
+              <Image 
+                src="/bible-bg.png" 
+                alt="Producción devocional y estudio bíblico" 
+                fill 
+                sizes="(max-width: 768px) 100vw, 500px" 
+                className="object-cover" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent flex items-end p-4">
+                <span className="text-xs font-semibold text-white bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded">
+                  Infraestructura digital
+                </span>
+              </div>
             </div>
-            <div className="border-t border-stone-100 pt-3 text-xs text-stone-600">
-              Servidores · Envío de devocionales · Producción de audio diario
+            <div className="p-7 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-serif font-bold text-stone-900 mb-3">Infraestructura y producción</h3>
+                <p className="text-stone-600 text-sm leading-relaxed mb-6">
+                  Permite costear los servidores web, el software de distribución de correos diarios, el almacenamiento en la nube y el equipo de audio y edición para mantener las oraciones libres de anuncios invasivos.
+                </p>
+              </div>
+              <div className="border-t border-stone-100 pt-3 text-xs text-stone-600">
+                Servidores · Envío de devocionales · Producción de audio diario
+              </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-7 border border-stone-200 shadow-sm flex flex-col justify-between">
-            <div>
-              <p className="text-xs font-semibold text-stone-800 bg-stone-100 px-2.5 py-1 rounded border border-stone-200 inline-block mb-3">
-                Acción solidaria
-              </p>
-              <h3 className="text-xl font-serif font-bold text-stone-900 mb-3">Apoyo a comedores y abrigo</h3>
-              <p className="text-stone-600 text-sm leading-relaxed mb-6">
-                Un porcentaje de los fondos recaudados se canaliza a la compra directa de alimentos no perecibles, víveres básicos y abrigo para familias en coordinación con comedores comunitarios de Santiago y regiones.
-              </p>
+          <div className="bg-white rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between overflow-hidden">
+            <div className="relative h-44 w-full">
+              <Image 
+                src="/solidarity-community.jpg" 
+                alt="Ayuda solidaria y comedores" 
+                fill 
+                sizes="(max-width: 768px) 100vw, 500px" 
+                className="object-cover" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent flex items-end p-4">
+                <span className="text-xs font-semibold text-white bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded">
+                  Labor comunitaria
+                </span>
+              </div>
             </div>
-            <div className="border-t border-stone-100 pt-3 text-xs text-stone-600">
-              Víveres no perecibles · Cajas familiares · Apoyo directo a comedores
+            <div className="p-7 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-serif font-bold text-stone-900 mb-3">Apoyo a comedores y abrigo</h3>
+                <p className="text-stone-600 text-sm leading-relaxed mb-6">
+                  Un porcentaje de los fondos recaudados se canaliza a la compra directa de alimentos no perecibles, víveres básicos y abrigo para familias en coordinación con comedores comunitarios de Santiago y regiones.
+                </p>
+              </div>
+              <div className="border-t border-stone-100 pt-3 text-xs text-stone-600">
+                Víveres no perecibles · Cajas familiares · Apoyo directo a comedores
+              </div>
             </div>
           </div>
         </div>
@@ -161,6 +187,16 @@ export default function Donaciones() {
 
       {/* 5. TARJETAS DE APORTE VOLUNTARIO SOBRIAS */}
       <section className="max-w-5xl mx-auto px-5 mb-20">
+        <div className="flex justify-center mb-6">
+          <Image 
+            src="/divider-cross.png" 
+            alt="Divisor con cruz" 
+            width={240} 
+            height={28} 
+            className="h-5 w-auto object-contain opacity-75"
+          />
+        </div>
+
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mb-2">
             Aportes voluntarios sugeridos

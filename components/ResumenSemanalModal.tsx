@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
 interface PeticionResumen {
   id: string | number;
@@ -53,13 +54,22 @@ Señor, tú conoces el silencio de cada familia, las pruebas de salud y las carg
       aria-modal="true"
       aria-labelledby="modal-guion-titulo"
     >
-      <div className="relative w-full max-w-2xl bg-white rounded-xl p-6 sm:p-8 shadow-2xl border border-stone-200 max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white rounded-2xl p-6 sm:p-8 shadow-2xl border border-stone-200 max-h-[90vh] overflow-y-auto">
         
         <div className="flex justify-between items-start mb-4 pb-3 border-b border-stone-200">
           <div>
-            <h3 id="modal-guion-titulo" className="font-serif font-bold text-stone-900 text-lg sm:text-xl">
-              Lectura Comunitaria Dominical
-            </h3>
+            <div className="flex items-center gap-2 mb-1">
+              <Image 
+                src="/icon-community.png" 
+                alt="Comunidad" 
+                width={20} 
+                height={20} 
+                className="w-5 h-5 object-contain"
+              />
+              <h3 id="modal-guion-titulo" className="font-serif font-bold text-stone-900 text-lg sm:text-xl">
+                Lectura Comunitaria Dominical
+              </h3>
+            </div>
             <p className="text-stone-600 text-xs mt-0.5">
               Guion preparado para la intercesión semanal en YouTube con las intenciones compartidas.
             </p>

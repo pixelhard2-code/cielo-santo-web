@@ -840,15 +840,17 @@ export default function Home() {
           />
         </div>
 
-        {/* Silueta de pinos en la base */}
-        <div className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none opacity-20">
+        {/* Silueta de pinos y horizonte en la base, fundiéndose suavemente hacia la sección oscura */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 pointer-events-none overflow-hidden">
           <Image 
-            src="/mountains-illustration.png" 
-            alt="Silueta de bosque" 
+            src="/hero-bg-alt2.png" 
+            alt="Pinos y horizonte al amanecer" 
             fill
             sizes="100vw"
-            className="object-cover object-bottom"
+            className="object-cover object-bottom opacity-65"
           />
+          {/* Fusión suave desde el fondo pergamino superior hacia la base oscura */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#121110] via-[#f4eee2]/50 to-[#f4eee2]"></div>
         </div>
 
         <div className="relative z-10 max-w-xl mx-auto">
@@ -928,13 +930,13 @@ export default function Home() {
               <div>
                 <div className="relative aspect-video w-full overflow-hidden group">
                   <Image 
-                    src="/yt-thumb-manana.png" 
+                    src="/images/yt-thumb-manana.jpg" 
                     alt="Oración de la mañana" 
                     fill
                     sizes="(max-width: 768px) 100vw, 380px"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/15 transition-colors"></div>
                   
                   {/* Botón de reproducción circular en el centro */}
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -976,13 +978,13 @@ export default function Home() {
               <div>
                 <div className="relative aspect-video w-full overflow-hidden group">
                   <Image 
-                    src="/yt-thumb-salmo91.png" 
+                    src="/images/yt-thumb-salmo91.jpg" 
                     alt="Salmo 91 y protección" 
                     fill
                     sizes="(max-width: 768px) 100vw, 380px"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/15 transition-colors"></div>
 
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center text-white border border-white/30 group-hover:scale-110 transition-transform">
@@ -1023,13 +1025,13 @@ export default function Home() {
               <div>
                 <div className="relative aspect-video w-full overflow-hidden group">
                   <Image 
-                    src="/yt-thumb-hijos.png" 
+                    src="/yt-thumb-hijos-real.jpg" 
                     alt="Oración por los hijos" 
                     fill
                     sizes="(max-width: 768px) 100vw, 380px"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/15 transition-colors"></div>
 
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center text-white border border-white/30 group-hover:scale-110 transition-transform">

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Image from 'next/image';
 import CheckoutModal, { ModalItem } from '@/components/CheckoutModal';
 
 export default function Productos() {
@@ -61,21 +62,43 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
     <main className="min-h-screen pb-20">
       
       {/* 1. ENCABEZADO */}
-      <section className="bg-stone-900 text-stone-100 py-20 px-5 text-center relative overflow-hidden">
+      <section className="bg-stone-900 text-stone-100 py-24 px-5 text-center relative overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-40">
+          <Image 
+            src="/hero-bg-alt1.png" 
+            alt="Amanecer sobre montañas y lago" 
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-stone-950/80"></div>
+        </div>
+
         <div className="relative z-10 max-w-3xl mx-auto">
           <p className="font-serif italic text-amber-300 text-base mb-2">Lectura y meditación</p>
           <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white mb-5 leading-tight">
             Devocionales para acompañar tu día
           </h1>
-          <p className="text-base text-stone-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base text-stone-200 max-w-2xl mx-auto leading-relaxed">
             Textos y oraciones preparadas con dedicación para ordenar el pensamiento antes de iniciar la jornada o al terminar la noche.
           </p>
         </div>
       </section>
 
       {/* 2. GUÍA DE BOLSILLO SIN COSTO */}
-      <section className="max-w-4xl mx-auto px-5 -mt-8 relative z-20 mb-14">
-        <div className="bg-white rounded-xl p-6 sm:p-8 border border-stone-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+      <section className="max-w-4xl mx-auto px-5 -mt-10 relative z-20 mb-14">
+        <div className="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
+          <div className="w-full md:w-44 h-36 md:h-40 relative rounded-xl overflow-hidden shrink-0 border border-stone-200 shadow-sm">
+            <Image
+              src="/siete-salmos-cover.jpg"
+              alt="Guía de 7 Salmos para el descanso"
+              fill
+              sizes="(max-width: 768px) 100vw, 176px"
+              className="object-cover"
+            />
+          </div>
+
           <div className="flex-1 text-center md:text-left">
             <span className="text-xs font-semibold text-amber-900 bg-amber-50 px-2.5 py-1 rounded border border-amber-200 inline-block mb-2.5">
               Material descargable sin costo
@@ -117,105 +140,147 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
 
       {/* 3. MATERIALES DE ACOMPAÑAMIENTO */}
       <section className="max-w-5xl mx-auto px-5">
+        <div className="flex justify-center mb-8">
+          <Image 
+            src="/divider-cross.png" 
+            alt="Divisor sagrado con cruz" 
+            width={240} 
+            height={28} 
+            className="h-5 w-auto object-contain opacity-75"
+          />
+        </div>
+
         <div className="grid md:grid-cols-2 gap-7">
           
           {/* PRODUCTO 1: Suscripción Devocional */}
-          <div className="bg-white rounded-xl p-7 sm:p-9 border border-stone-200 flex flex-col justify-between shadow-sm">
-            <div>
-              <p className="text-xs font-medium text-stone-500 mb-1">Acompañamiento matutino por correo</p>
-              <h3 className="text-2xl font-serif font-bold text-stone-900 mb-3">Oraciones del Alba</h3>
-              <p className="text-stone-600 text-sm mb-6 leading-relaxed">
-                Cada amanecer a las 7:00 AM recibirás una reflexión pausada, el Salmo del día y una oración guiada en tu bandeja de entrada antes de que comience el ruido de la jornada.
-              </p>
-              
-              <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-3xl font-serif font-bold text-stone-900">$2.990</span>
-                <span className="text-xs text-stone-500">CLP / mes</span>
-                <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $3 USD)</span>
+          <div className="bg-white rounded-xl border border-stone-200 flex flex-col justify-between shadow-sm overflow-hidden">
+            <div className="relative h-48 w-full">
+              <Image 
+                src="/oraciones-alba.jpg" 
+                alt="Amanecer Oraciones del Alba" 
+                fill 
+                sizes="(max-width: 768px) 100vw, 500px" 
+                className="object-cover" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-5">
+                <span className="text-white text-xs font-semibold bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded">
+                  Acompañamiento matutino por correo
+                </span>
               </div>
-
-              <ul className="space-y-3 mb-8 text-sm text-stone-700">
-                <li className="flex items-start gap-2.5">
-                  <span className="text-amber-800 font-bold">·</span>
-                  <span>Lectura del día y meditación breve directamente en tu correo.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-amber-800 font-bold">·</span>
-                  <span>Inclusión de tus intenciones personales en la oración comunitaria.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-amber-800 font-bold">·</span>
-                  <span>Suscripción voluntaria; puedes cancelar en cualquier momento con un clic.</span>
-                </li>
-              </ul>
             </div>
 
-            <div>
-              <button 
-                onClick={() => handleOpenCheckout({
-                  id: 'suscripcion_alba',
-                  title: 'Oraciones del Alba',
-                  subtitle: 'Suscripción devocional diaria a las 7:00 AM',
-                  priceDisplay: '$2.990 CLP / mes',
-                  type: 'suscripcion',
-                  amount: 2990,
-                  currency: 'CLP',
-                })}
-                className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
-              >
-                Suscribirme al envío diario
-              </button>
-              <p className="text-center text-[11px] text-stone-600 mt-2.5">Pago procesado mediante Mercado Pago y Webpay.</p>
+            <div className="p-7 sm:p-8 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl font-serif font-bold text-stone-900 mb-2">Oraciones del Alba</h3>
+                <p className="text-stone-600 text-sm mb-6 leading-relaxed">
+                  Cada amanecer a las 7:00 AM recibirás una reflexión pausada, el Salmo del día y una oración guiada en tu bandeja de entrada antes de que comience el ruido de la jornada.
+                </p>
+                
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="text-3xl font-serif font-bold text-stone-900">$2.990</span>
+                  <span className="text-xs text-stone-500">CLP / mes</span>
+                  <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $3 USD)</span>
+                </div>
+
+                <ul className="space-y-3 mb-8 text-sm text-stone-700">
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-amber-800 font-bold">·</span>
+                    <span>Lectura del día y meditación breve directamente en tu correo.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-amber-800 font-bold">·</span>
+                    <span>Inclusión de tus intenciones personales en la oración comunitaria.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-amber-800 font-bold">·</span>
+                    <span>Suscripción voluntaria; puedes cancelar en cualquier momento con un clic.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <button 
+                  onClick={() => handleOpenCheckout({
+                    id: 'suscripcion_alba',
+                    title: 'Oraciones del Alba',
+                    subtitle: 'Suscripción devocional diaria a las 7:00 AM',
+                    priceDisplay: '$2.990 CLP / mes',
+                    type: 'suscripcion',
+                    amount: 2990,
+                    currency: 'CLP',
+                  })}
+                  className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
+                >
+                  Suscribirme al envío diario
+                </button>
+                <p className="text-center text-[11px] text-stone-600 mt-2.5">Pago procesado mediante Mercado Pago y Webpay.</p>
+              </div>
             </div>
           </div>
 
           {/* PRODUCTO 2: Libro Digital de Salmos */}
-          <div className="bg-white rounded-xl p-7 sm:p-9 border border-stone-200 flex flex-col justify-between shadow-sm">
-            <div>
-              <p className="text-xs font-medium text-stone-500 mb-1">Edición digital en formato PDF</p>
-              <h3 className="text-2xl font-serif font-bold text-stone-900 mb-3">30 días con los Salmos</h3>
-              <p className="text-stone-600 text-sm mb-6 leading-relaxed">
-                Un libro pensado para leer diez minutos cada día. Contiene treinta Salmos seleccionados, explicaciones sencillas de su contexto y oraciones para cerrar el momento de lectura.
-              </p>
-              
-              <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-3xl font-serif font-bold text-stone-900">$4.990</span>
-                <span className="text-xs text-stone-500">CLP / pago único</span>
-                <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $5.20 USD)</span>
+          <div className="bg-white rounded-xl border border-stone-200 flex flex-col justify-between shadow-sm overflow-hidden">
+            <div className="relative h-44 w-full">
+              <Image 
+                src="/bible-bg.png" 
+                alt="30 días con los Salmos" 
+                fill 
+                sizes="(max-width: 768px) 100vw, 500px" 
+                className="object-cover" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-5">
+                <span className="text-white text-xs font-semibold bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded">
+                  Edición digital en formato PDF
+                </span>
               </div>
-
-              <ul className="space-y-3 mb-8 text-sm text-stone-700">
-                <li className="flex items-start gap-2.5">
-                  <span className="text-stone-900 font-bold">·</span>
-                  <span>Descarga inmediata tras el pago y envío de respaldo a tu correo.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-stone-900 font-bold">·</span>
-                  <span>Treinta lecturas ordenadas para leer desde el teléfono o imprimir.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-stone-900 font-bold">·</span>
-                  <span>Tipografía amplia y descanso visual para leer en la cama.</span>
-                </li>
-              </ul>
             </div>
 
-            <div>
-              <button 
-                onClick={() => handleOpenCheckout({
-                  id: 'devocional_30d',
-                  title: '30 días con los Salmos',
-                  subtitle: 'Devocional digital en PDF con 30 reflexiones de paz',
-                  priceDisplay: '$4.990 CLP único pago',
-                  type: 'devocional',
-                  amount: 4990,
-                  currency: 'CLP',
-                })}
-                className="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
-              >
-                Comprar libro digital
-              </button>
-              <p className="text-center text-[11px] text-stone-600 mt-2.5">Disponible inmediatamente tras confirmar el aporte.</p>
+            <div className="p-7 sm:p-8 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl font-serif font-bold text-stone-900 mb-2">30 días con los Salmos</h3>
+                <p className="text-stone-600 text-sm mb-6 leading-relaxed">
+                  Un libro pensado para leer diez minutos cada día. Contiene treinta Salmos seleccionados, explicaciones sencillas de su contexto y oraciones para cerrar el momento de lectura.
+                </p>
+                
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="text-3xl font-serif font-bold text-stone-900">$4.990</span>
+                  <span className="text-xs text-stone-500">CLP / pago único</span>
+                  <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $5.20 USD)</span>
+                </div>
+
+                <ul className="space-y-3 mb-8 text-sm text-stone-700">
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-stone-900 font-bold">·</span>
+                    <span>Descarga inmediata tras el pago y envío de respaldo a tu correo.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-stone-900 font-bold">·</span>
+                    <span>Treinta lecturas ordenadas para leer desde el teléfono o imprimir.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-stone-900 font-bold">·</span>
+                    <span>Tipografía amplia y descanso visual para leer en la cama.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <button 
+                  onClick={() => handleOpenCheckout({
+                    id: 'devocional_30d',
+                    title: '30 días con los Salmos',
+                    subtitle: 'Devocional digital en PDF con 30 reflexiones de paz',
+                    priceDisplay: '$4.990 CLP único pago',
+                    type: 'devocional',
+                    amount: 4990,
+                    currency: 'CLP',
+                  })}
+                  className="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
+                >
+                  Comprar libro digital
+                </button>
+                <p className="text-center text-[11px] text-stone-600 mt-2.5">Disponible inmediatamente tras confirmar el aporte.</p>
+              </div>
             </div>
           </div>
 
