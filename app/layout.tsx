@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import AudioPlayer from "@/components/AudioPlayer";
 
 const spectral = Spectral({
   subsets: ["latin"],
@@ -110,6 +109,9 @@ export default function RootLayout({
                   <li>
                     <Link href="/nosotros" className="hover:text-stone-900 transition-colors">Sobre Nosotros</Link>
                   </li>
+                  <li>
+                    <Link href="/privacidad" className="hover:text-stone-900 transition-colors">Privacidad</Link>
+                  </li>
                 </ul>
               </div>
 
@@ -126,6 +128,11 @@ export default function RootLayout({
                     >
                       <span>Canal de YouTube</span>
                       <span className="text-[10px]">↗</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://whatsapp.com/channel/0029VbE70lOKWEKjgKs68S16" target="_blank" rel="noopener noreferrer" className="hover:text-stone-900 transition-colors inline-flex items-center gap-1">
+                      <span>Canal de WhatsApp</span><span className="text-[10px]">↗</span>
                     </a>
                   </li>
                   <li>
@@ -172,7 +179,6 @@ export default function RootLayout({
 
           </div>
         </footer>
-        <AudioPlayer />
       </body>
     </html>
   );

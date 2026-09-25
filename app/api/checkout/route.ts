@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!validEmail || !nombre) return unavailable('Ingresa un nombre y un correo válido.', 400);
 
-    const donation = DONATION_CATALOG[sku as DonationSku];
+    const donation = isDonationSku(sku) ? DONATION_CATALOG[sku] : undefined;
     const isDonation = Boolean(donation);
     if (!isDonation && !isProductSku(sku)) return unavailable('El producto seleccionado no existe.', 400);
 
@@ -164,3 +164,7 @@ const DONATION_CATALOG: Record<DonationSku, { name: string; fund: 'operativo' | 
   aporte_solidario: { name: 'Aporte solidario', fund: 'solidario' },
   aporte_continuidad: { name: 'Aporte de continuidad', fund: 'continuidad' },
 };
+
+function isDonationSku(value: string): value is DonationSku {
+  return Object.prototype.hasOwnProperty.call(DONATION_CATALOG, value);
+}

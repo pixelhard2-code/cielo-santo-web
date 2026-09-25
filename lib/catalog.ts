@@ -21,5 +21,5 @@ export const PRODUCT_CATALOG: Record<ProductSku, {
 };
 
 export function isProductSku(value: unknown): value is ProductSku {
-  return typeof value === 'string' && value in PRODUCT_CATALOG;
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(PRODUCT_CATALOG, value);
 }

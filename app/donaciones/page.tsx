@@ -7,7 +7,8 @@ export const metadata = {
   description: 'Conoce cómo sostener Cielo Santo y cómo se separan los recursos digitales de la ayuda solidaria.',
 };
 
-export default function Donaciones() {
+export default async function Donaciones({ searchParams }: { searchParams: Promise<{ checkout?: string }> }) {
+  const params = await searchParams;
   return (
     <main className="min-h-screen pb-20">
       
@@ -35,6 +36,8 @@ export default function Donaciones() {
           </p>
         </div>
       </section>
+
+      {params.checkout === 'fallido' && <p role="alert" className="max-w-5xl mx-auto -mt-10 mb-10 px-5 text-sm text-rose-800">La pasarela no confirmó el pago. No se registró el aporte; puedes intentarlo nuevamente.</p>}
 
       {/* 2. VIDEO / MENSAJE DEL EQUIPO */}
       <section className="max-w-4xl mx-auto px-5 -mt-16 relative z-20 mb-16">

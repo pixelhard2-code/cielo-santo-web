@@ -6,7 +6,8 @@ export const metadata = {
   description: 'Descarga lecturas gratuitas y encuentra recursos cristianos de oración y reflexión.',
 };
 
-export default function Productos() {
+export default async function Productos({ searchParams }: { searchParams: Promise<{ checkout?: string }> }) {
+  const params = await searchParams;
   return (
     <main className="min-h-screen pb-20">
       
@@ -34,6 +35,8 @@ export default function Productos() {
           </p>
         </div>
       </section>
+
+      {params.checkout === 'cancelado' && <p role="status" className="max-w-5xl mx-auto mt-6 px-5 text-sm text-stone-600">El proceso de pago se canceló; no se realizó ningún cobro.</p>}
 
       {/* 2. GUÍA DE BOLSILLO SIN COSTO */}
       <section className="max-w-4xl mx-auto px-5 -mt-10 relative z-20 mb-14">

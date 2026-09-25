@@ -9,10 +9,10 @@ export function isFulfillmentReady(kind: 'one_time' | 'subscription') {
     isResendConfigured &&
     process.env.RESEND_FROM_EMAIL &&
     process.env.NEXT_PUBLIC_APP_URL &&
-    process.env.DOWNLOAD_TOKEN_SECRET &&
+    (process.env.DOWNLOAD_TOKEN_SECRET?.length ?? 0) >= 32 &&
     process.env.STRIPE_WEBHOOK_SECRET &&
     isStripeConfigured &&
-    (kind !== 'subscription' || process.env.CRON_SECRET),
+    (kind !== 'subscription' || (process.env.CRON_SECRET?.length ?? 0) >= 32),
   );
 }
 

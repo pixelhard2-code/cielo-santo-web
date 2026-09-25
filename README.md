@@ -32,7 +32,7 @@
 - **Motor Viral de WhatsApp**: Compartir reflexiones bíblicas y oraciones matutinas en grupos familiares con un solo clic y URL optimizada.
 
 ### 2. 🙏 Muro de Intenciones Comunitario
-- **Publicación en Tiempo Real**: Recepción de necesidades familiares, de salud y fortaleza espiritual.
+- **Muro moderado**: Las peticiones públicas quedan pendientes hasta su revisión; las privadas nunca aparecen en el muro público.
 - **Privacidad y Cuidado de Datos**:
   - *Modo Público*: Se comparte con la comunidad en el muro tras moderación.
   - *Modo Privado*: Intenciones confidenciales reservadas únicamente para la oración del equipo pastoral.
@@ -40,9 +40,8 @@
 - **Apoyo Comunitario Fraternal**: Interacción interactiva (*"Hoy estás orando junto a otras X personas por..."*).
 - **Herramienta de Reporte**: Botón comunitario para filtrar spam o contenido indebido.
 
-### 3. 🎥 Sinergia con YouTube (@cielosanto20)
+### 3. 🎥 Acompañamiento en YouTube (@cielosanto20)
 - **Oraciones de Acompañamiento**: Accesos directos a la *Oración de la Mañana*, el *Salmo 91* y la *Oración por los Hijos*.
-- **Flywheel Comunitario**: Las intenciones depositadas en el muro web se integran y leen en la oración comunitaria dominical en video.
 
 ### 4. 📚 Recursos para el Camino de Fe
 - **Devocional "30 días con los Salmos"**: Libro digital en PDF descargable de inmediato con lecturas guiadas de paz y fortaleza ($4.990 CLP).
@@ -64,10 +63,9 @@
 | **Frontend Framework** | **Next.js 16.3.6 (App Router)** | Renderizado híbrido Server Components + Client Leaves con Turbopack. |
 | **Librería de Interfaz** | **React 19.2.8** | Manejo de estado reactivo y Server Actions. |
 | **Estilos y Diseño** | **Tailwind CSS v4.0** | Sistema de diseño sobrio con tokens cálidos (`#fdf8f6`, `amber-700`, `slate-900`). |
-| **Base de Datos** | **Supabase (PostgreSQL)** | Almacenamiento relacional de peticiones, suscriptores, amens y RLS. |
-| **Pasarela de Pagos (Chile)** | **Mercado Pago SDK** | Cobros en pesos chilenos vía Webpay, Redcompra, CuentaRUT y tarjetas de crédito. |
-| **Pasarela Internacional** | **Stripe (Opcional)** | Cobros internacionales en USD para donantes fuera de Chile. |
-| **Motor de Correo** | **Resend** | Entrega inmediata de PDFs devocionales y cron jobs matutinos a las 7:00 AM. |
+| **Base de Datos** | **Supabase (PostgreSQL)** | Datos privados gestionados exclusivamente desde rutas del servidor, con RLS y moderación. |
+| **Pasarela de Pagos** | **Mercado Pago / Stripe** | Aportes CLP y suscripciones Stripe; la entrega solo se marca tras confirmar el pago. |
+| **Motor de Correo** | **Resend** | Confirmación de suscripción, entrega de compra y oración diaria. |
 | **Lenguaje** | **TypeScript 5** | Tipado estricto en toda la aplicación. |
 
 ---
@@ -99,9 +97,15 @@ Configura en `.env.local`:
 ```env
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 MERCADOPAGO_ACCESS_TOKEN="APP_USR-..."
+MP_WEBHOOK_SECRET="..."
 NEXT_PUBLIC_SUPABASE_URL="https://tu-proyecto.supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="tu-anon-key"
+SUPABASE_SERVICE_ROLE_KEY="tu-service-role-key"
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 RESEND_API_KEY="re_..."
+RESEND_FROM_EMAIL="Cielo Santo <paz@cielosanto.com>"
+CRON_SECRET="secreto-aleatorio"
+DOWNLOAD_TOKEN_SECRET="secreto-aleatorio-de-al-menos-32-caracteres"
 ```
 
 ### 4. Iniciar el servidor local
@@ -109,6 +113,21 @@ RESEND_API_KEY="re_..."
 npm run dev
 ```
 Abre tu navegador en [http://localhost:3000](http://localhost:3000).
+
+### Configuración necesaria para operar
+
+La interfaz se mantiene en modo de disponibilidad limitada hasta completar estos pasos; no simula confirmaciones ni pagos.
+
+1. Ejecuta la migración `supabase/migrations/20260925000000_trust_and_billing.sql` en el SQL Editor de Supabase. Usa una llave `service_role` solo como variable de entorno del servidor; nunca la publiques como `NEXT_PUBLIC_*`.
+2. En Supabase Storage, sube `private-resources/treinta-dias-con-los-salmos.pdf` al bucket privado `paid-resources` con ese mismo nombre. El endpoint de descarga genera un enlace firmado válido por 72 horas.
+3. Configura Stripe para escuchar `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid` y `invoice.payment_failed` en `/api/webhooks/stripe`. Habilita el portal de cliente en Stripe para gestionar/cancelar suscripciones.
+4. Configura el webhook de Mercado Pago en `/api/webhooks/mercadopago` y guarda su secreto en `MP_WEBHOOK_SECRET`.
+5. Verifica el dominio remitente en Resend y configura `RESEND_FROM_EMAIL`.
+6. En GitHub Actions, crea los secretos `CIELO_SANTO_SITE_URL` y `CRON_SECRET`. El workflow horario ejecuta el envío cuando la hora de Santiago es 07:00; el primer envío depende del planificador de GitHub.
+
+Las nuevas peticiones quedan en estado `pendiente`. El equipo debe revisarlas desde Supabase y cambiar su `estado` a `aprobado` o `rechazado`; las privadas nunca deben aprobarse para el muro público. Las peticiones privadas y las publicaciones sin aprobar se eliminan a los 90 días por el proceso diario de limpieza.
+
+Los pagos de los tres destinos de aporte quedan etiquetados como `operativo`, `solidario` o `continuidad` en la tabla `payments`. Esa etiqueta registra el destino elegido en el sitio; la conciliación bancaria y el reporte financiero siguen siendo responsabilidad de la organización.
 
 ### 5. Compilación para producción
 ```bash

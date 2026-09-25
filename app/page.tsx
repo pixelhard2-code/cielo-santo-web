@@ -155,6 +155,22 @@ export default async function Home() {
       </section>
 
 
+      <section className="px-4 mt-4 max-w-5xl mx-auto w-full">
+        <div className="bg-[#f0f7f1] text-stone-900 rounded-2xl p-4 sm:p-5 border border-emerald-900/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5 text-center sm:text-left">
+            <Image src="/whatsapp.svg" alt="" width={40} height={40} className="w-10 h-10 object-contain shrink-0" />
+            <div>
+              <h3 className="font-bold text-sm sm:text-base leading-snug">Únete al canal de WhatsApp</h3>
+              <p className="text-xs text-stone-600 leading-relaxed mt-0.5">Recibe las novedades y oraciones de Cielo Santo directamente en WhatsApp.</p>
+            </div>
+          </div>
+          <a href="https://whatsapp.com/channel/0029VbE70lOKWEKjgKs68S16" target="_blank" rel="noopener noreferrer"
+            className="shrink-0 bg-[#128c55] hover:bg-[#0e7547] text-white font-bold text-xs py-2.5 px-5 rounded-full transition-colors shadow-sm">
+            Unirme al canal ↗
+          </a>
+        </div>
+      </section>
+
       {/* ========================================================
           4. SECCIÓN SOSTENIMIENTO INDEPENDIENTE (Fondo oscuro)
       ======================================================== */}

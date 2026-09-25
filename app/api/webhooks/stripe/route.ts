@@ -114,6 +114,33 @@ export async function POST(request: Request) {
       }).eq('stripe_subscription_id', subscription.id);
     }
 
+    if (event.type === 'invoice.paid' || event.type === 'invoice.payment_failed') {
+      const invoice = event.data.object as Stripe.Invoice;
+      const subscriptionReference = invoice.parent?.subscription_details?.subscription;
+      const subscriptionId = typeof subscriptionReference === 'string'
+        ? subscriptionReference
+        : subscriptionReference?.id;
+      if (subscriptionId) {
+        const currentSubscription = await stripe.subscriptions.retrieve(subscriptionId);
+        const status = currentSubscription.status;
+        const { data: member } = await supabase.from('subscription_members')
+          .select('email').eq('stripe_subscription_id', subscriptionId).maybeSingle();
+        await supabase.from('subscription_members').update({ status, updated_at: new Date().toISOString() })
+          .eq('stripe_subscription_id', subscriptionId);
+
+        // The first payment is recorded from checkout.session.completed. Later
+        // billing cycles are recorded here using Stripe's invoice ID.
+        if (event.type === 'invoice.paid' && invoice.billing_reason === 'subscription_cycle' && member && invoice.amount_paid > 0) {
+          const { error: renewalError } = await supabase.from('payments').upsert({
+            provider: 'stripe', provider_payment_id: invoice.id, provider_session_id: invoice.id,
+            sku: 'suscripcion_alba', email: member.email, amount: invoice.amount_paid,
+            currency: invoice.currency.toUpperCase(), status: 'paid', updated_at: new Date().toISOString(),
+          }, { onConflict: 'provider,provider_payment_id' });
+          if (renewalError) throw new Error('No se pudo registrar la renovación.');
+        }
+      }
+    }
+
     return NextResponse.json({ received: true });
   } catch (error) {
     console.error('Error procesando webhook de Stripe:', error instanceof Error ? error.message : 'Error desconocido');
