@@ -17,39 +17,39 @@ export default function Productos() {
     e.preventDefault();
     if (!freeGuideEmail.trim()) return;
 
-    const guiaTexto = `🕊️ CIELO SANTO — GUÍA DE BOLSILLO: 7 SALMOS PARA LA ANSIEDAD Y EL INSOMNIO
+    const guiaTexto = `CIELO SANTO · GUÍA DE BOLSILLO: SIETE SALMOS PARA LA INQUIETUD Y EL DESCANSO
 ========================================================================
-¡Paz y bien! Esta guía fue preparada para acompañarte en tus noches de desvelo
-y en esos momentos donde la mente se llena de preocupación.
+Esta pequeña selección de lecturas bíblicas fue preparada para acompañar
+tus noches de desvelo y aquellos momentos donde la mente se llena de afán.
 
-SALMO 1: "EL SEÑOR ES MI LUZ Y MI SALVACIÓN" (Salmo 27:1)
-¿De quién temeré? Cuando el miedo toque a tu puerta, recuerda quién cuida de ti.
+1. SALMO 27:1 — "EL SEÑOR ES MI LUZ Y MI SALVACIÓN"
+¿De quién temeré? Cuando la incertidumbre toque tu puerta, recuerda quién sostiene tu vida.
 
-SALMO 2: "EN PAZ ME ACOSTARÉ Y ASIMISMO DORMIRÉ" (Salmo 4:8)
-Porque solo tú, Señor, me haces vivir confiado. Suelta la necesidad de controlar todo.
+2. SALMO 4:8 — "EN PAZ ME ACOSTARÉ Y ASIMISMO DORMIRÉ"
+Porque solo tú, Señor, me haces vivir confiado. Suelta la necesidad de controlar todo lo que ocurrirá mañana.
 
-SALMO 3: "EL SEÑOR ES MI PASTOR; NADA ME FALTARÁ" (Salmo 23:1-2)
+3. SALMO 23:1-2 — "EL SEÑOR ES MI PASTOR; NADA ME FALTARÁ"
 En lugares de delicados pastos me hará descansar; junto a aguas de reposo me pastoreará.
 
-SALMO 4: "DIOS ES NUESTRO AMPARO Y FORTALEZA" (Salmo 46:1)
-Nuestro pronto auxilio en las tribulaciones. Quédate quieto y conoce que Él es Dios.
+4. SALMO 46:1 — "DIOS ES NUESTRO AMPARO Y FORTALEZA"
+Nuestro pronto auxilio en las tribulaciones. Guarda silencio por unos minutos y reconoce su presencia.
 
-SALMO 5: "EL QUE HABITA AL ABRIGO DEL ALTÍSIMO" (Salmo 91:1-2)
-Morará bajo la sombra del Omnipotente. Ninguna plaga tocará tu morada.
+5. SALMO 91:1-2 — "EL QUE HABITA AL ABRIGO DEL ALTÍSIMO"
+Morará bajo la sombra del Omnipotente. Diré yo del Señor: Esperanza mía y castillo mío; mi Dios, en quien confiaré.
 
-SALMO 6: "MI SOCORRO VIENE DEL SEÑOR" (Salmo 121:1-3)
-No dará tu pie al resbaladero, ni se dormirá el que te guarda.
+6. SALMO 121:2-3 — "MI SOCORRO VIENE DEL SEÑOR"
+No dará tu pie al resbaladero, ni se dormirá el que te guarda. El Señor te guarda de todo mal.
 
-SALMO 7: "ECHA SOBRE EL SEÑOR TU CARGA" (Salmo 55:Respira y entrega)
-Y Él te sustentará; no dejará para siempre caído al justo.
+7. SALMO 55:22 — "ECHA SOBRE EL SEÑOR TU CARGA"
+Y Él te sustentará; no dejará para siempre caído al justo. Respira profundo y entrega tus pensamientos.
 ========================================================================
-Cielo Santo • www.cielosanto.com • Canal oficial de YouTube: @cielosanto20`;
+Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube: @cielosanto20`;
 
     const blob = new Blob([guiaTexto], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "7-Salmos-Ansiedad-CieloSanto.txt";
+    link.download = "Siete-Salmos-Para-El-Descanso-CieloSanto.txt";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -58,34 +58,33 @@ Cielo Santo • www.cielosanto.com • Canal oficial de YouTube: @cielosanto20`;
   };
 
   return (
-    <main className="min-h-screen bg-stone-50 pb-20 font-sans">
+    <main className="min-h-screen pb-20">
       
-      {/* 1. ENCABEZADO DE RECURSOS */}
-      <section className="bg-slate-900 text-white py-20 px-5 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-amber-500/20 blur-[100px] rounded-full pointer-events-none"></div>
-        
+      {/* 1. ENCABEZADO */}
+      <section className="bg-stone-900 text-stone-100 py-20 px-5 text-center relative overflow-hidden">
         <div className="relative z-10 max-w-3xl mx-auto">
-          <span className="text-amber-500 font-bold uppercase text-xs tracking-widest mb-4 block">Materiales de Crecimiento</span>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6">Recursos para tu camino de fe</h1>
-          <p className="text-lg text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
-            Herramientas y guías preparadas con dedicación para acompañarte en tu rutina diaria. 
-            Al adquirir este material, no solo enriqueces tu vida espiritual, sino que ayudas a sostener la producción gratuita de Cielo Santo.
+          <p className="font-serif italic text-amber-300 text-base mb-2">Lectura y meditación</p>
+          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white mb-5 leading-tight">
+            Devocionales para acompañar tu día
+          </h1>
+          <p className="text-base text-stone-300 max-w-2xl mx-auto leading-relaxed">
+            Textos y oraciones preparadas con dedicación para ordenar el pensamiento antes de iniciar la jornada o al terminar la noche.
           </p>
         </div>
       </section>
 
-      {/* 2. LEAD MAGNET GRATUITO: GUÍA DE 7 SALMOS */}
-      <section className="max-w-4xl mx-auto px-5 -mt-10 relative z-20 mb-14">
-        <div className="bg-amber-100/90 rounded-3xl p-6 md:p-8 border border-amber-300 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+      {/* 2. GUÍA DE BOLSILLO SIN COSTO */}
+      <section className="max-w-4xl mx-auto px-5 -mt-8 relative z-20 mb-14">
+        <div className="bg-white rounded-xl p-6 sm:p-8 border border-stone-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex-1 text-center md:text-left">
-            <span className="bg-amber-800 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
-              Recurso Gratuito de Bienvenida
+            <span className="text-xs font-semibold text-amber-900 bg-amber-50 px-2.5 py-1 rounded border border-amber-200 inline-block mb-2.5">
+              Material descargable sin costo
             </span>
-            <h3 className="text-2xl font-serif font-bold text-amber-950 mb-2">
-              7 Salmos para la Ansiedad y el Insomnio
-            </h3>
-            <p className="text-slate-700 text-xs md:text-sm leading-relaxed">
-              Una guía de bolsillo en formato digital diseñada para leer en la cama o en momentos de angustia. Descárgala sin costo.
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 mb-2">
+              Siete Salmos para la inquietud y el descanso
+            </h2>
+            <p className="text-stone-600 text-sm leading-relaxed max-w-xl">
+              Una recopilación breve para leer en el teléfono durante noches de desvelo o momentos de agobio. Puedes descargarla ingresando tu correo.
             </p>
           </div>
 
@@ -98,164 +97,154 @@ Cielo Santo • www.cielosanto.com • Canal oficial de YouTube: @cielosanto20`;
                   value={freeGuideEmail}
                   onChange={(e) => setFreeGuideEmail(e.target.value)}
                   placeholder="Tu correo electrónico..."
-                  className="px-4 py-3 rounded-xl border border-amber-300 text-xs text-slate-800 bg-white focus:ring-2 focus:ring-amber-500"
+                  className="px-3.5 py-2.5 rounded-lg border border-stone-300 text-xs text-stone-900 bg-white focus:ring-1 focus:ring-stone-800"
                 />
                 <button
                   type="submit"
-                  className="bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 px-5 rounded-xl text-xs transition-all shadow-md active:scale-95 shrink-0"
+                  className="bg-stone-900 hover:bg-stone-800 text-white font-medium py-2.5 px-4 rounded-lg text-xs transition-colors shrink-0"
                 >
-                  📥 Descargar Gratis
+                  Descargar lectura
                 </button>
               </form>
             ) : (
-              <div className="bg-white text-emerald-800 px-5 py-3 rounded-xl border border-emerald-300 text-xs font-bold text-center">
-                ✓ ¡Descarga iniciada! Esperamos que sea de bendición para tu descanso.
+              <div className="bg-emerald-50 text-emerald-900 px-4 py-2.5 rounded-lg border border-emerald-200 text-xs text-center">
+                Descarga iniciada. Esperamos que acompañe tu descanso esta noche.
               </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* 3. TARJETAS DE RECURSOS */}
-      <section className="max-w-5xl mx-auto px-5 relative z-20">
-        <div className="grid md:grid-cols-2 gap-8">
+      {/* 3. MATERIALES DE ACOMPAÑAMIENTO */}
+      <section className="max-w-5xl mx-auto px-5">
+        <div className="grid md:grid-cols-2 gap-7">
           
-          {/* PRODUCTO 1: Suscripción */}
-          <div className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-stone-100 flex flex-col relative overflow-hidden transition-transform hover:-translate-y-1">
-            <div className="text-amber-700 font-bold uppercase text-xs tracking-wider mb-2">Acompañamiento Diario</div>
-            <h3 className="text-3xl font-serif font-bold text-slate-900 mb-3">Oraciones del Alba</h3>
-            <p className="text-slate-600 mb-6 text-sm leading-relaxed">
-              Empieza cada día con propósito. Recibe inspiración y calma directamente en tu bandeja de entrada antes de que comience el ruido de la jornada.
-            </p>
-            
-            <div className="flex items-baseline gap-2 mb-8 flex-wrap">
-              <span className="text-4xl font-bold text-slate-900">$2.990</span>
-              <span className="text-sm font-medium text-slate-500">CLP / mes</span>
-              <span className="text-xs text-slate-400 font-normal ml-1">(aprox. $3.15 USD)</span>
+          {/* PRODUCTO 1: Suscripción Devocional */}
+          <div className="bg-white rounded-xl p-7 sm:p-9 border border-stone-200 flex flex-col justify-between shadow-sm">
+            <div>
+              <p className="text-xs font-medium text-stone-500 mb-1">Acompañamiento matutino por correo</p>
+              <h3 className="text-2xl font-serif font-bold text-stone-900 mb-3">Oraciones del Alba</h3>
+              <p className="text-stone-600 text-sm mb-6 leading-relaxed">
+                Cada amanecer a las 7:00 AM recibirás una reflexión pausada, el Salmo del día y una oración guiada en tu bandeja de entrada antes de que comience el ruido de la jornada.
+              </p>
+              
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-3xl font-serif font-bold text-stone-900">$2.990</span>
+                <span className="text-xs text-stone-500">CLP / mes</span>
+                <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $3 USD)</span>
+              </div>
+
+              <ul className="space-y-3 mb-8 text-sm text-stone-700">
+                <li className="flex items-start gap-2.5">
+                  <span className="text-amber-800 font-bold">·</span>
+                  <span>Lectura del día y meditación breve directamente en tu correo.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="text-amber-800 font-bold">·</span>
+                  <span>Inclusión de tus intenciones personales en la oración comunitaria.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="text-amber-800 font-bold">·</span>
+                  <span>Suscripción voluntaria; puedes cancelar en cualquier momento con un clic.</span>
+                </li>
+              </ul>
             </div>
 
-            {/* Lista de Beneficios */}
-            <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-start gap-3 text-slate-700 text-sm">
-                <svg className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                Un Salmo, reflexión original y oración guiada a las 7:00 AM.
-              </li>
-              <li className="flex items-start gap-3 text-slate-700 text-sm">
-                <svg className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                Inclusión de tus intenciones en nuestras oraciones comunitarias semanales.
-              </li>
-              <li className="flex items-start gap-3 text-slate-700 text-sm">
-                <svg className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                Cancela en cualquier momento con un solo clic, sin contratos.
-              </li>
-            </ul>
-
-            <button 
-              onClick={() => handleOpenCheckout({
-                id: 'suscripcion_alba',
-                title: 'Oraciones del Alba',
-                subtitle: 'Suscripción devocional diaria a las 7:00 AM',
-                priceDisplay: '$2.990 CLP / mes',
-                type: 'suscripcion',
-                amount: 2990,
-                currency: 'CLP',
-              })}
-              className="w-full bg-amber-700 hover:bg-amber-800 active:scale-95 text-white font-bold text-lg py-4 px-6 rounded-xl transition-all shadow-md"
-            >
-              Suscribirme Ahora
-            </button>
-            <p className="text-center text-xs text-slate-400 mt-4">Cobro mensual transparente. Mercado Pago y Webpay.</p>
+            <div>
+              <button 
+                onClick={() => handleOpenCheckout({
+                  id: 'suscripcion_alba',
+                  title: 'Oraciones del Alba',
+                  subtitle: 'Suscripción devocional diaria a las 7:00 AM',
+                  priceDisplay: '$2.990 CLP / mes',
+                  type: 'suscripcion',
+                  amount: 2990,
+                  currency: 'CLP',
+                })}
+                className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
+              >
+                Suscribirme al envío diario
+              </button>
+              <p className="text-center text-[11px] text-stone-600 mt-2.5">Pago procesado mediante Mercado Pago y Webpay.</p>
+            </div>
           </div>
 
-          {/* PRODUCTO 2: Libro Digital */}
-          <div className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-stone-100 flex flex-col relative overflow-hidden transition-transform hover:-translate-y-1">
-            <div className="absolute top-0 right-0 bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-bl-2xl">
-              DEVOCIONAL COMPLETO
-            </div>
-            <div className="text-slate-900 font-bold uppercase text-xs tracking-wider mb-2">Libro Digital (PDF)</div>
-            <h3 className="text-3xl font-serif font-bold text-slate-900 mb-3">30 días con los Salmos</h3>
-            <p className="text-slate-600 mb-6 text-sm leading-relaxed">
-              Un devocional para comenzar cada mañana con calma, reflexión y oración. Diseñado para leerse en 10 minutos al día y encontrar fortaleza en los momentos difíciles.
-            </p>
-            
-            <div className="flex items-baseline gap-2 mb-8 flex-wrap">
-              <span className="text-4xl font-bold text-slate-900">$4.990</span>
-              <span className="text-sm font-medium text-slate-500">CLP / pago único</span>
-              <span className="text-xs text-slate-400 font-normal ml-1">(aprox. $5.25 USD)</span>
+          {/* PRODUCTO 2: Libro Digital de Salmos */}
+          <div className="bg-white rounded-xl p-7 sm:p-9 border border-stone-200 flex flex-col justify-between shadow-sm">
+            <div>
+              <p className="text-xs font-medium text-stone-500 mb-1">Edición digital en formato PDF</p>
+              <h3 className="text-2xl font-serif font-bold text-stone-900 mb-3">30 días con los Salmos</h3>
+              <p className="text-stone-600 text-sm mb-6 leading-relaxed">
+                Un libro pensado para leer diez minutos cada día. Contiene treinta Salmos seleccionados, explicaciones sencillas de su contexto y oraciones para cerrar el momento de lectura.
+              </p>
+              
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-3xl font-serif font-bold text-stone-900">$4.990</span>
+                <span className="text-xs text-stone-500">CLP / pago único</span>
+                <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $5.20 USD)</span>
+              </div>
+
+              <ul className="space-y-3 mb-8 text-sm text-stone-700">
+                <li className="flex items-start gap-2.5">
+                  <span className="text-stone-900 font-bold">·</span>
+                  <span>Descarga inmediata tras el pago y envío de respaldo a tu correo.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="text-stone-900 font-bold">·</span>
+                  <span>Treinta lecturas ordenadas para leer desde el teléfono o imprimir.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="text-stone-900 font-bold">·</span>
+                  <span>Tipografía amplia y descanso visual para leer en la cama.</span>
+                </li>
+              </ul>
             </div>
 
-            {/* Lista de Beneficios */}
-            <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-start gap-3 text-slate-700 text-sm">
-                <svg className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                Descarga inmediata a tu celular, tablet o computadora.
-              </li>
-              <li className="flex items-start gap-3 text-slate-700 text-sm">
-                <svg className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                30 lecturas bíblicas, 30 reflexiones originales y 30 oraciones guiadas.
-              </li>
-              <li className="flex items-start gap-3 text-slate-700 text-sm">
-                <svg className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                Diagramación limpia y cómoda para lectura en pantallas.
-              </li>
-            </ul>
-
-            <button 
-              onClick={() => handleOpenCheckout({
-                id: 'devocional_30d',
-                title: '30 días con los Salmos',
-                subtitle: 'Devocional digital en PDF con 30 reflexiones de paz',
-                priceDisplay: '$4.990 CLP único pago',
-                type: 'devocional',
-                amount: 4990,
-                currency: 'CLP',
-              })}
-              className="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold text-lg py-4 px-6 rounded-xl transition-all shadow-md"
-            >
-              Comprar y Descargar
-            </button>
-            <p className="text-center text-xs text-slate-400 mt-4">Recibirás el acceso en tu correo de inmediato.</p>
+            <div>
+              <button 
+                onClick={() => handleOpenCheckout({
+                  id: 'devocional_30d',
+                  title: '30 días con los Salmos',
+                  subtitle: 'Devocional digital en PDF con 30 reflexiones de paz',
+                  priceDisplay: '$4.990 CLP único pago',
+                  type: 'devocional',
+                  amount: 4990,
+                  currency: 'CLP',
+                })}
+                className="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
+              >
+                Comprar libro digital
+              </button>
+              <p className="text-center text-[11px] text-stone-600 mt-2.5">Disponible inmediatamente tras confirmar el aporte.</p>
+            </div>
           </div>
 
         </div>
       </section>
 
-      {/* 4. SEÑALES DE CONFIANZA */}
-      <section className="max-w-4xl mx-auto px-5 mt-16 text-center">
-        <div className="flex flex-col md:flex-row justify-center items-center gap-8 py-8 border-y border-stone-200">
-          <div className="flex items-center gap-3">
-            <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-            <div className="text-left">
-              <p className="font-bold text-slate-900 text-sm">Pago 100% Seguro</p>
-              <p className="text-xs text-slate-500">Transacciones encriptadas vía Mercado Pago y Webpay</p>
-            </div>
+      {/* 4. PREGUNTAS SOBRE EL MATERIAL */}
+      <section className="max-w-3xl mx-auto px-5 mt-16">
+        <h2 className="text-2xl font-serif font-bold text-stone-900 mb-6 text-center">Preguntas Frecuentes</h2>
+        <div className="space-y-4">
+          <div className="bg-white p-5 rounded-xl border border-stone-200">
+            <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Cómo recibo el devocional tras el pago?</h3>
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
+              Al finalizar el proceso verás un enlace de descarga directa en pantalla. Además, nuestro sistema te enviará automáticamente un correo con el archivo adjunto para que lo conserves siempre.
+            </p>
           </div>
-          <div className="hidden md:block w-px h-10 bg-stone-200"></div>
-          <div className="flex items-center gap-3">
-            <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-            <div className="text-left">
-              <p className="font-bold text-slate-900 text-sm">Entrega Inmediata</p>
-              <p className="text-xs text-slate-500">Descarga directa y respaldo a tu correo</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* 5. PREGUNTAS FRECUENTES */}
-      <section className="max-w-3xl mx-auto px-5 mt-20">
-        <h2 className="text-2xl font-serif font-bold text-slate-900 mb-8 text-center">Preguntas Frecuentes</h2>
-        <div className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm">
-            <h4 className="font-bold text-slate-900 mb-2">¿Cómo recibo el devocional?</h4>
-            <p className="text-slate-600 text-sm">Al confirmar el pago podrás descargarlo de inmediato en tu pantalla y además te enviaremos una copia a tu correo para que lo tengas guardado para siempre.</p>
+          <div className="bg-white p-5 rounded-xl border border-stone-200">
+            <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Qué medios de pago están disponibles?</h3>
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
+              En Chile puedes pagar con CuentaRUT, tarjetas de débito Redcompra y tarjetas de crédito mediante Mercado Pago y Webpay.
+            </p>
           </div>
-          <div className="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm">
-            <h4 className="font-bold text-slate-900 mb-2">¿Qué medios de pago aceptan?</h4>
-            <p className="text-slate-600 text-sm">Aceptamos tarjetas de débito (Redcompra / CuentaRUT), tarjetas de crédito nacionales e internacionales a través de Mercado Pago y Webpay.</p>
-          </div>
-          <div className="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm">
-            <h4 className="font-bold text-slate-900 mb-2">¿Puedo cancelar la suscripción mensual?</h4>
-            <p className="text-slate-600 text-sm">Sí, sin compromisos. Cada correo que recibes incluye un botón para cancelar o pausar el envío en cualquier momento con un solo clic.</p>
+
+          <div className="bg-white p-5 rounded-xl border border-stone-200">
+            <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Cómo se cancela la suscripción mensual si ya no deseo recibirla?</h3>
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
+              Cada correo electrónico incluye un enlace al pie para cancelar la suscripción en un solo paso. También puedes escribirnos a contacto@cielosanto.com y la cancelaremos de inmediato.
+            </p>
           </div>
         </div>
       </section>

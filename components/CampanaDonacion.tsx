@@ -3,36 +3,44 @@ import Link from 'next/link';
 
 export default function CampanaDonacion() {
   return (
-    <section className="py-16 px-5 max-w-4xl mx-auto w-full">
-      <div className="bg-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
+    <section className="py-12 px-5 max-w-4xl mx-auto w-full">
+      <div className="bg-stone-900 text-stone-100 rounded-2xl p-7 md:p-10 border border-stone-800 flex flex-col md:flex-row items-center justify-between gap-8">
         
-        {/* Decoración de fondo */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 blur-[80px] rounded-full pointer-events-none"></div>
-
-        <div className="flex-1 relative z-10 text-center md:text-left">
-          <span className="bg-amber-500/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
-            Campaña del Mes
-          </span>
-          <h2 className="text-3xl font-serif font-bold text-white mb-3">
-            Sembrando Esperanza
+        <div className="flex-1 text-center md:text-left">
+          <p className="text-amber-400 font-serif text-sm italic mb-1.5">
+            Sostenimiento independiente
+          </p>
+          <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3">
+            Un espacio libre de publicidad para la oración diaria
           </h2>
-          <p className="text-slate-300 text-sm md:text-base mb-6 leading-relaxed">
-            Este mes, nuestro objetivo es mejorar los equipos de audio para las oraciones matutinas y destinar un porcentaje a causas benéficas de nuestra fundación aliada. Ayúdanos a seguir llevando paz a más personas.
+          <p className="text-stone-300 text-sm leading-relaxed mb-6 max-w-xl">
+            Cielo Santo no vende espacios publicitarios ni cobra por orar. Los servidores, las herramientas de envío y la producción de audio se sostienen gracias al aporte voluntario de quienes encuentran aquí un momento de paz cada día.
           </p>
           
-          <Link 
-            href="/donaciones"
-            className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg"
-          >
-            Conoce cómo apoyar
-          </Link>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+            <Link 
+              href="/donaciones"
+              className="bg-amber-800 hover:bg-amber-700 active:scale-95 text-white font-medium py-3 px-6 rounded-lg transition-colors text-sm"
+            >
+              Cómo colaborar con el sostenimiento
+            </Link>
+            <Link 
+              href="/nosotros"
+              className="text-stone-400 hover:text-stone-200 text-sm font-medium transition-colors"
+            >
+              Conocer nuestros compromisos éticos →
+            </Link>
+          </div>
         </div>
 
-        {/* Elemento visual de apoyo (Icono/Ilustración) */}
-        <div className="hidden md:flex shrink-0 w-48 h-48 bg-slate-800 rounded-full border-4 border-slate-700 items-center justify-center relative z-10 shadow-inner">
-          <svg className="w-20 h-20 text-amber-500 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-          </svg>
+        {/* Cita breve y sobria */}
+        <div className="w-full md:w-64 bg-stone-950/70 p-5 rounded-xl border border-stone-800/80 text-left shrink-0">
+          <p className="text-xs text-stone-300 italic leading-relaxed font-serif">
+            &ldquo;Cada cual dé como propuso en su corazón: no con tristeza, ni por necesidad, porque Dios ama al dador alegre.&rdquo;
+          </p>
+          <p className="text-[11px] text-amber-400/90 font-medium mt-2">
+            2 Corintios 9:7
+          </p>
         </div>
 
       </div>

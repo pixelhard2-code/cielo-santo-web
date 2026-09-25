@@ -3,123 +3,124 @@ import Link from 'next/link';
 
 export const metadata = {
   title: "Sobre Nosotros | Cielo Santo",
-  description: "Conoce el equipo, la misión y los principios de transparencia que guían el ministerio Cielo Santo.",
+  description: "Conoce el origen, el propósito y los compromisos éticos que guían a la comunidad de Cielo Santo.",
 };
 
 export default function Nosotros() {
   return (
-    <main className="min-h-screen bg-stone-50 pb-20 font-sans">
+    <main className="min-h-screen pb-20">
       
       {/* 1. ENCABEZADO */}
-      <section className="bg-slate-900 text-white py-20 px-5 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-amber-500/20 blur-[100px] rounded-full pointer-events-none"></div>
+      <section className="bg-stone-900 text-stone-100 py-20 px-5 text-center relative overflow-hidden">
         <div className="relative z-10 max-w-3xl mx-auto">
-          <span className="text-amber-500 font-bold uppercase text-xs tracking-widest mb-4 block">Identidad y Misión</span>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6">Quiénes Somos y Qué Nos Mueve</h1>
-          <p className="text-lg text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
-            Cielo Santo nació con un anhelo simple y profundo: ser un remanso de paz y oración constante para cualquier persona que necesite renovar su esperanza en medio del ruido del mundo.
+          <p className="font-serif italic text-amber-300 text-base mb-2">Comunidad y vocación</p>
+          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white mb-5 leading-tight">
+            Quiénes somos y qué nos mueve
+          </h1>
+          <p className="text-base text-stone-300 font-normal max-w-2xl mx-auto leading-relaxed">
+            Cielo Santo nació con una vocación simple y clara: ofrecer un espacio de oración sincera y sosiego para quienes necesitan renovar su fe en medio de las pruebas de la vida cotidiana.
           </p>
         </div>
       </section>
 
-      {/* 2. NUESTRA HISTORIA Y AUTORÍA HUMANA */}
-      <section className="max-w-4xl mx-auto px-5 -mt-10 relative z-20 mb-16">
-        <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-stone-100">
-          <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">
-            El nacimiento de un refugio espiritual
+      {/* 2. NUESTRA HISTORIA */}
+      <section className="max-w-4xl mx-auto px-5 -mt-8 relative z-20 mb-16">
+        <div className="bg-white rounded-xl p-7 sm:p-10 border border-stone-200 shadow-sm">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mb-5">
+            El origen de este espacio de oración
           </h2>
-          <div className="space-y-4 text-slate-600 leading-relaxed text-sm md:text-base">
+          <div className="space-y-4 text-stone-700 leading-relaxed text-sm sm:text-base">
             <p>
-              En tiempos de angustia, enfermedad o incertidumbre económica, encontrar un espacio de silencio y oración sincera puede transformar el día de una familia. 
-              Cielo Santo comenzó compartiendo pequeñas oraciones matutinas y Salmos en video a través de YouTube, donde miles de personas comenzaron a congregarse virtualmente cada amanecer para empezar su día con Dios.
+              En momentos de enfermedad, cansancio laboral o dificultades familiares, unos minutos de lectura bíblica y oración tranquila pueden transformar el rumbo del día. Cielo Santo comenzó compartiendo oraciones breves y lecturas de los Salmos en YouTube, donde personas de diversas ciudades comenzaron a congregarse cada amanecer antes de salir de casa.
             </p>
             <p>
-              Creemos firmemente en el poder de la <strong>autoría y la calidez humana</strong>. Detrás de cada video, cada reflexión escrita y cada respuesta a las intenciones del muro, hay personas reales que dedican su tiempo, su fe y su voz a acompañar a los hermanos en oración.
+              Creemos firmemente en el valor de la <strong>calidez y la autoría humana</strong>. Detrás de cada video publicado, de cada texto escrito y de cada oración en el muro, hay personas reales que dedican su tiempo, su fe y su voz para acompañar las peticiones de los hermanos con cariño y respeto.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 3. NUESTROS PRINCIPIOS NO NEGOCIABLES */}
+      {/* 3. PRINCIPIOS ÉTICOS */}
       <section className="max-w-4xl mx-auto px-5 mb-16">
-        <h2 className="text-2xl font-serif font-bold text-slate-900 mb-8 text-center">Nuestros Compromisos Éticos</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm text-center">
-            <div className="w-12 h-12 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
-              🕊️
-            </div>
-            <h3 className="font-bold text-slate-900 mb-2 text-base font-serif">Separación Espiritual y Financiera</h3>
-            <p className="text-slate-600 text-xs leading-relaxed">
-              La bendición de Dios no se compra ni se vende. Ningún aporte monetario otorga favores divinos especiales; todos los creyentes tienen el mismo valor en nuestra comunidad.
+        <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mb-8 text-center">
+          Nuestros compromisos éticos
+        </h2>
+        <div className="grid md:grid-cols-3 gap-5">
+          <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+            <h3 className="font-serif font-bold text-stone-900 mb-2 text-base">
+              Independencia espiritual
+            </h3>
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
+              La bendición de Dios no se condiciona ni se compra. Los aportes monetarios son completamente voluntarios y jamás otorgan favores espirituales especiales.
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm text-center">
-            <div className="w-12 h-12 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
-              🔍
-            </div>
-            <h3 className="font-bold text-slate-900 mb-2 text-base font-serif">Transparencia Radical</h3>
-            <p className="text-slate-600 text-xs leading-relaxed">
-              Diferenciamos con claridad los aportes para sostener la plataforma digital de los fondos destinados a causas benéficas de alimentación y abrigo.
+          <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+            <h3 className="font-serif font-bold text-stone-900 mb-2 text-base">
+              Transparencia en los recursos
+            </h3>
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
+              Diferenciamos con honestidad los fondos requeridos para mantener la plataforma digital de aquellos canalizados a la ayuda comunitaria en terreno.
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm text-center">
-            <div className="w-12 h-12 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
-              🤝
-            </div>
-            <h3 className="font-bold text-slate-900 mb-2 text-base font-serif">Acompañamiento Sin Juicios</h3>
-            <p className="text-slate-600 text-xs leading-relaxed">
-              Acogemos a toda persona que busque a Dios en momentos difíciles. El Muro de Oraciones es un santuario libre, gratuito y confidencial.
+          <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+            <h3 className="font-serif font-bold text-stone-900 mb-2 text-base">
+              Respeto a la intimidad
+            </h3>
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
+              Cuidamos la confidencialidad de cada persona que escribe en el muro. Toda intención marcada como privada se mantiene bajo estricta reserva pastoral.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 4. DESTINO TRANSPARENTE DE LOS FONDOS */}
+      {/* 4. DESTINO DE LOS RECURSOS */}
       <section className="max-w-4xl mx-auto px-5 mb-16">
-        <div className="bg-amber-50/60 p-8 rounded-3xl border border-amber-200/60">
-          <h2 className="text-2xl font-serif font-bold text-slate-900 mb-4 text-center">
-            ¿Cómo se sostienen nuestras obras?
+        <div className="bg-stone-100 p-7 sm:p-9 rounded-xl border border-stone-200">
+          <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2 text-center">
+            Cómo se distribuyen los aportes
           </h2>
-          <div className="grid md:grid-cols-2 gap-6 mt-6">
-            <div className="bg-white p-6 rounded-2xl border border-amber-100">
-              <span className="text-xs uppercase font-bold text-amber-800 tracking-wider block mb-2">Fondo Operativo</span>
-              <h3 className="font-bold text-slate-900 text-lg mb-2">Sostener Cielo Santo</h3>
-              <p className="text-slate-600 text-xs leading-relaxed">
-                Destinado a costear servidores en la nube, infraestructura web, herramientas de edición de audio y producción de video diaria para que el contenido siga siendo 100% gratuito.
+          <p className="text-stone-600 text-xs sm:text-sm text-center max-w-lg mx-auto mb-6">
+            Dos áreas de trabajo para sostener la misión y apoyar al prójimo:
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="bg-white p-5 rounded-lg border border-stone-200">
+              <h3 className="font-serif font-bold text-stone-900 text-base mb-1.5">Área digital y audiovisual</h3>
+              <p className="text-stone-600 text-xs leading-relaxed">
+                Costea la infraestructura en la nube, el sistema de correos matutinos, los servidores de audio y la grabación diaria para que las oraciones continúen abiertas y gratuitas para todos.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl border border-amber-100">
-              <span className="text-xs uppercase font-bold text-emerald-800 tracking-wider block mb-2">Fondo Solidario</span>
-              <h3 className="font-bold text-slate-900 text-lg mb-2">Campañas Benéficas Aliadas</h3>
-              <p className="text-slate-600 text-xs leading-relaxed">
-                Canalizado hacia compras de despensas, cajas de alimentos no perecibles y abrigo para familias vulnerables en comedores solidarios verificados.
+            <div className="bg-white p-5 rounded-lg border border-stone-200">
+              <h3 className="font-serif font-bold text-stone-900 text-base mb-1.5">Área solidaria en terreno</h3>
+              <p className="text-stone-600 text-xs leading-relaxed">
+                Canaliza víveres, canastas familiares y abrigo para personas vulnerables en colaboración con iniciativas solidarias y comedores locales en Chile.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. CONTACTO Y ENLACES */}
-      <section className="max-w-2xl mx-auto px-5 text-center">
-        <h3 className="text-xl font-serif font-bold text-slate-900 mb-2">¿Tienes alguna duda o testimonio?</h3>
-        <p className="text-slate-600 text-sm mb-6">
-          Nos encantaría escucharte. Puedes escribirnos para compartir un agradecimiento o consultar sobre el uso de recursos.
+      {/* 5. CONTACTO */}
+      <section className="max-w-xl mx-auto px-5 text-center">
+        <h3 className="text-xl font-serif font-bold text-stone-900 mb-2">Contacto directo</h3>
+        <p className="text-stone-600 text-xs sm:text-sm mb-6 leading-relaxed">
+          Si deseas compartir una inquietud, testimoniar una bendición o solicitar información sobre los balances del proyecto, escríbenos directamente.
         </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
           <a 
             href="mailto:contacto@cielosanto.com"
-            className="bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-6 rounded-xl transition-all text-sm"
+            className="w-full sm:w-auto bg-stone-900 hover:bg-stone-800 text-white font-medium py-2.5 px-5 rounded-lg transition-colors text-xs"
           >
-            ✉️ contacto@cielosanto.com
+            contacto@cielosanto.com
           </a>
           <Link 
             href="/donaciones"
-            className="bg-amber-700 hover:bg-amber-800 text-white font-medium py-3 px-6 rounded-xl transition-all text-sm"
+            className="w-full sm:w-auto bg-stone-100 hover:bg-stone-200 text-stone-800 font-medium py-2.5 px-5 rounded-lg transition-colors text-xs border border-stone-300"
           >
-            Conoce cómo apoyar la misión
+            Información de sostenimiento
           </Link>
         </div>
       </section>
