@@ -1,0 +1,24 @@
+name: Daily prayer email
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send-daily-prayer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger the 7 AM Santiago delivery
+        env:
+          SITE_URL: ${{ secrets.CIELO_SANTO_SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          test -n "$SITE_URL"
+          test -n "$CRON_SECRET"
+          curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/oraciones"

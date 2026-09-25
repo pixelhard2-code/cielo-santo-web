@@ -1,255 +1,45 @@
-"use client";
-import React, { useState, useEffect } from 'react';
+import { getChileDateLabel, getDailyReading } from '@/lib/daily-content';
+import { isSupabaseConfigured, supabase } from '@/lib/supabase';
+import PrayerWall from '@/components/PrayerWall';
+import NewsletterSignup from '@/components/NewsletterSignup';
+import DailyPsalmCard from '@/components/DailyPsalmCard';
 import Image from 'next/image';
 import Link from 'next/link';
-import ResumenSemanalModal from '@/components/ResumenSemanalModal';
 
-interface Peticion {
-  id: string | number;
-  nombre: string;
-  tiempo: string;
-  avatar: string;
-  peticion: string;
-  apoyos: number;
-  apoyado?: boolean;
-  esPrivada?: boolean;
-  esAgradecimiento?: boolean;
+export const dynamic = 'force-dynamic';
+
+async function loadPrayerWall() {
+  if (!isSupabaseConfigured || !supabase) return { petitions: [], thanks: [], available: false };
+  const { data, error } = await supabase.from('peticiones')
+    .select('id, nombre, peticion, tipo, apoyos, created_at')
+    .eq('estado', 'aprobado').eq('es_privada', false)
+    .order('created_at', { ascending: false }).limit(30);
+  if (error || !data) return { petitions: [], thanks: [], available: false };
+  const normalize = (row: typeof data[number]) => ({
+    id: String(row.id), nombre: row.nombre, peticion: row.peticion,
+    apoyos: row.apoyos, created_at: row.created_at,
+  });
+  return {
+    petitions: data.filter((row) => row.tipo === 'peticion').map(normalize),
+    thanks: data.filter((row) => row.tipo === 'agradecimiento').map(normalize),
+    available: true,
+  };
 }
 
-const peticionesIniciales: Peticion[] = [
-  { 
-    id: 1, 
-    nombre: "María Elena", 
-    tiempo: "hace 2 horas",
-    avatar: "/avatar-maria.png",
-    peticion: "Pido oración por la salud de mi esposo que está en exámenes médicos.", 
-    apoyos: 28, 
-    apoyado: false 
-  },
-  { 
-    id: 2, 
-    nombre: "Juan C.", 
-    tiempo: "hace 4 horas",
-    avatar: "/avatar-juan.png",
-    peticion: "Por la paz en mi hogar y trabajo para mi hijo mayor.", 
-    apoyos: 19, 
-    apoyado: false 
-  },
-  { 
-    id: 3, 
-    nombre: "Gloria S.", 
-    tiempo: "hace 6 horas",
-    avatar: "/avatar-gloria.png",
-    peticion: "Agradeciendo por un día más de vida y pidiendo fortaleza espiritual.", 
-    apoyos: 45, 
-    apoyado: false 
-  },
-];
+async function loadAmenCount() {
+  if (!isSupabaseConfigured || !supabase) return null;
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+  const day = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  const { data, error } = await supabase.from('daily_amens').select('count')
+    .eq('delivery_date', `${day.year}-${day.month}-${day.day}`).maybeSingle();
+  return error ? null : data?.count ?? 0;
+}
 
-const agradecimientosIniciales: Peticion[] = [
-  { 
-    id: 101, 
-    nombre: "Elena M.", 
-    tiempo: "hace 1 día",
-    avatar: "/avatar-maria.png",
-    peticion: "Doy gracias al Señor y a quienes oraron por nosotros; la cirugía de mi esposo concluyó sin complicaciones y ya descansa en casa.", 
-    apoyos: 34, 
-    apoyado: false, 
-    esAgradecimiento: true 
-  },
-  { 
-    id: 102, 
-    nombre: "Andrés V.", 
-    tiempo: "hace 2 días",
-    avatar: "/avatar-juan.png",
-    peticion: "Pude recuperar un sueño tranquilo tras varias semanas de mucha angustia. Gracias a la comunidad por sus palabras y compañía.", 
-    apoyos: 22, 
-    apoyado: false, 
-    esAgradecimiento: true 
-  },
-  { 
-    id: 103, 
-    nombre: "Patricia C.", 
-    tiempo: "hace 3 días",
-    avatar: "/avatar-gloria.png",
-    peticion: "Mi hijo comenzó a trabajar hoy tras meses de búsqueda. Doy testimonio de la fidelidad de Dios y del consuelo que encuentro cada mañana en las oraciones.", 
-    apoyos: 51, 
-    apoyado: false, 
-    esAgradecimiento: true 
-  },
-];
+export default async function Home() {
+  const [wall, amenCount] = await Promise.all([loadPrayerWall(), loadAmenCount()]);
+  const dailyReading = getDailyReading();
+  const chileDate = getChileDateLabel();
 
-export default function Home() {
-  const [amenCount, setAmenCount] = useState(142);
-  const [hasClickedAmen, setHasClickedAmen] = useState(false);
-
-  // Estados del Muro
-  const [tabMuro, setTabMuro] = useState<"peticiones" | "agradecimientos">("peticiones");
-  const [peticiones, setPeticiones] = useState<Peticion[]>(peticionesIniciales);
-  const [agradecimientos, setAgradecimientos] = useState<Peticion[]>(agradecimientosIniciales);
-  const [nombreInput, setNombreInput] = useState("");
-  const [peticionInput, setPeticionInput] = useState("");
-  const [quiereNotificacion, setQuiereNotificacion] = useState(false);
-  const [tipoPrivacidad, setTipoPrivacidad] = useState<"publica" | "privada">("publica");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [guionModalOpen, setGuionModalOpen] = useState(false);
-
-  // Estado del Newsletter
-  const [emailNewsletter, setEmailNewsletter] = useState("");
-  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const timer = setTimeout(() => {
-      if (!isMounted) return;
-
-      try {
-        const amenGuardado = localStorage.getItem('cielosanto_amen_registrado');
-        if (amenGuardado) {
-          setHasClickedAmen(true);
-          setAmenCount((prev) => prev + 1);
-        }
-
-        const guardadas = localStorage.getItem('cielosanto_peticiones_locales');
-        const apoyadasGuardadas: string[] = JSON.parse(localStorage.getItem('cielosanto_apoyadas') || '[]');
-
-        if (guardadas) {
-          const parsed: Peticion[] = JSON.parse(guardadas);
-          setPeticiones(parsed.filter(p => !p.esPrivada && !p.esAgradecimiento).map(p => ({
-            ...p,
-            avatar: p.avatar || "/avatar-placeholder.png",
-            tiempo: p.tiempo || "reciente",
-            apoyado: apoyadasGuardadas.includes(String(p.id))
-          })));
-        }
-      } catch {
-        // Fallback seguro
-      }
-    }, 0);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timer);
-    };
-  }, []);
-
-  const handleAmen = () => {
-    if (!hasClickedAmen) {
-      setAmenCount(prev => prev + 1);
-      setHasClickedAmen(true);
-      try {
-        localStorage.setItem('cielosanto_amen_registrado', 'true');
-      } catch {}
-    }
-  };
-
-  const handleApoyo = (id: string | number, esAgr = false) => {
-    const idStr = String(id);
-    const actualizar = (prev: Peticion[]) => prev.map(item => {
-      if (String(item.id) === idStr && !item.apoyado) {
-        return { ...item, apoyos: item.apoyos + 1, apoyado: true };
-      }
-      return item;
-    });
-
-    if (esAgr) {
-      setAgradecimientos(actualizar);
-    } else {
-      setPeticiones(actualizar);
-    }
-
-    try {
-      const apoyadasGuardadas: string[] = JSON.parse(localStorage.getItem('cielosanto_apoyadas') || '[]');
-      if (!apoyadasGuardadas.includes(idStr)) {
-        localStorage.setItem('cielosanto_apoyadas', JSON.stringify([...apoyadasGuardadas, idStr]));
-      }
-    } catch {}
-  };
-
-  const handleReportar = (id: string | number, esAgr = false) => {
-    const confirmar = window.confirm("¿Deseas reportar este mensaje para que nuestro equipo lo revise?");
-    if (confirmar) {
-      if (esAgr) {
-        setAgradecimientos(prev => prev.filter(p => p.id !== id));
-      } else {
-        setPeticiones(prev => prev.filter(p => p.id !== id));
-      }
-      alert("El mensaje ha sido derivado a moderación. Gracias por cuidar este espacio.");
-    }
-  };
-
-  const handleSubmitPeticion = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nombreInput.trim() || !peticionInput.trim()) {
-      alert("Por favor escribe tu nombre y la intención que deseas compartir.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    const esPrivada = tipoPrivacidad === "privada";
-    const esAgradecimiento = tabMuro === "agradecimientos";
-
-    const nueva: Peticion = {
-      id: Date.now(),
-      nombre: nombreInput.trim(),
-      tiempo: "hace unos momentos",
-      avatar: "/avatar-placeholder.png",
-      peticion: peticionInput.trim(),
-      apoyos: 1,
-      apoyado: true,
-      esPrivada,
-      esAgradecimiento,
-    };
-
-    if (!esPrivada) {
-      if (esAgradecimiento) {
-        setAgradecimientos([nueva, ...agradecimientos]);
-      } else {
-        const actualizadas = [nueva, ...peticiones];
-        setPeticiones(actualizadas);
-        try {
-          localStorage.setItem('cielosanto_peticiones_locales', JSON.stringify(actualizadas));
-        } catch {}
-      }
-    }
-
-    try {
-      await fetch('/api/peticiones', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          nombre: nueva.nombre, 
-          peticion: nueva.peticion,
-          esPrivada,
-          esAgradecimiento
-        }),
-      });
-    } catch {
-      // Fallback local
-    }
-
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
-    setNombreInput("");
-    setPeticionInput("");
-    setQuiereNotificacion(false);
-
-    setTimeout(() => {
-      setSubmitSuccess(false);
-    }, 6000);
-  };
-
-  const handleSubscribeNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!emailNewsletter.trim()) return;
-    setNewsletterSubscribed(true);
-  };
-
-  const urlWhatsappSalmo = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-    '"El Señor es mi pastor; nada me faltará. En lugares de delicados pastos me hará descansar." — Salmo 23:1-2.\n\nQue Dios traiga calma a tu corazón hoy:\nhttps://cielosanto.com'
-  )}`;
 
   return (
     <main className="flex flex-col min-h-screen">
@@ -261,7 +51,7 @@ export default function Home() {
         {/* Fondo panorámico con montañas y pinos */}
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/hero-prayer.png"
+            src="/hero-prayer.webp"
             alt="Amanecer en las montañas" 
             fill
             priority
@@ -330,107 +120,7 @@ export default function Home() {
       </section>
 
 
-      {/* ========================================================
-          2. TARJETA FLOTANTE: "SALMO DEL DÍA"
-      ======================================================== */}
-      <section id="salmo-del-dia" className="relative -mt-20 z-20 px-4 max-w-5xl mx-auto w-full">
-        
-        {/* Hojas decorativas de olivo a la izquierda (exactas a la imagen) */}
-        <div className="absolute -left-12 -top-8 w-28 h-auto pointer-events-none hidden lg:block opacity-85">
-          <Image 
-            src="/leaf-decoration.svg"
-            alt="Rama de olivo decorativa" 
-            width={120} 
-            height={90}
-            className="w-full h-auto object-contain"
-          />
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 sm:p-9 border border-[#e8e2d4] shadow-xl text-center relative">
-          
-          {/* Encabezado superior de la tarjeta */}
-          <div className="flex items-center justify-between mb-4 pb-2 border-b border-stone-100">
-            <div className="w-16 hidden sm:block"></div>
-            
-            <div className="flex items-center justify-center gap-2 mx-auto">
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-[#b77922]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 7v14m0-14C10.7 6 9 5.5 7 5.5c-1.7 0-3 .4-4 1.1v13c1-.7 2.3-1.1 4-1.1 2 0 3.7.5 5 1.5m0-13c1.3-1 3-1.5 5-1.5 1.7 0 3 .4 4 1.1v13c-1-.7-2.3-1.1-4-1.1-2 0-3.7.5-5 1.5"/></svg>
-              <h2 className="font-serif font-bold text-stone-900 text-lg sm:text-xl tracking-tight">
-                Salmo del día
-              </h2>
-            </div>
-
-            <span className="text-stone-600 text-xs font-medium">
-              Viernes, 25 de septiembre de 2026
-            </span>
-          </div>
-
-          {/* Versículo Principal */}
-          <blockquote className="text-xl sm:text-2xl font-serif text-stone-900 italic my-5 leading-relaxed max-w-2xl mx-auto">
-            &ldquo;El Señor es mi pastor; nada me faltará.<br className="hidden sm:inline" /> En lugares de delicados pastos me hará descansar.&rdquo;
-          </blockquote>
-          <p className="text-stone-600 text-xs font-bold tracking-widest uppercase mb-7">
-            Salmo 23:1-2
-          </p>
-
-          {/* 2 Columnas internas: Reflexión y Oración de hoy */}
-          <div className="grid sm:grid-cols-2 gap-4 text-left mb-6">
-            
-            {/* Columna Reflexión */}
-            <div className="bg-[#f1f5ef] p-5 rounded-xl border border-[#e4eadf]">
-              <div className="flex items-center gap-2 mb-2">
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-[#55705b]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 7v14m0-14C10.7 6 9 5.5 7 5.5c-1.7 0-3 .4-4 1.1v13c1-.7 2.3-1.1 4-1.1 2 0 3.7.5 5 1.5m0-13c1.3-1 3-1.5 5-1.5 1.7 0 3 .4 4 1.1v13c-1-.7-2.3-1.1-4-1.1-2 0-3.7.5-5 1.5"/></svg>
-                <h3 className="font-serif font-bold text-stone-900 text-sm">Reflexión</h3>
-              </div>
-              <p className="text-stone-700 text-xs sm:text-sm leading-relaxed">
-                La paz interior no comienza cuando se han resuelto todas las incertidumbres, sino cuando descansamos en la certeza de que Dios cuida de nosotros. No necesitas resolver todo hoy; da el paso que te corresponde con quietud.
-              </p>
-            </div>
-
-            {/* Columna Oración de hoy */}
-            <div className="bg-[#faf5eb] p-5 rounded-xl border border-[#efe6d5]">
-              <div className="flex items-center gap-2 mb-2">
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-[#b77922]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21V9m0 0c-1-2-2.3-3-4-3-1.3 0-2.3.7-2.8 1.8L4 10l4 4m4-5c1-2 2.3-3 4-3 1.3 0 2.3.7 2.8 1.8L20 10l-4 4m-4-5L9 4m3 5 3-5m-7 9 3 3m6-3-3 3"/></svg>
-                <h3 className="font-serif font-bold text-stone-900 text-sm">Oración de hoy</h3>
-              </div>
-              <p className="text-stone-700 text-xs sm:text-sm leading-relaxed italic">
-                &ldquo;Señor, en tus manos pongo mis preocupaciones de esta jornada. Renueva mis fuerzas y concédeme la templanza para vivir en paz con mi familia y mi prójimo. Amén.&rdquo;
-              </p>
-            </div>
-
-          </div>
-
-          {/* Acciones al pie de la tarjeta */}
-          <div className="flex flex-wrap justify-center gap-3 items-center pt-2">
-            <button 
-              onClick={handleAmen}
-              className={`px-6 py-2.5 rounded-full text-xs font-semibold transition-all flex items-center gap-2 ${
-                hasClickedAmen 
-                  ? 'bg-stone-200 text-stone-900 cursor-default' 
-                  : 'bg-[#1c1917] hover:bg-stone-800 text-white shadow-sm'
-              }`}
-            >
-              <svg className="w-3.5 h-3.5 text-amber-300 fill-current" viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-              <span>Decir Amén ({amenCount})</span>
-            </button>
-
-            <a 
-              href={urlWhatsappSalmo}
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white hover:bg-stone-50 text-stone-700 px-5 py-2.5 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 border border-stone-300"
-            >
-              <svg className="w-3.5 h-3.5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              <span>Compartir versículo</span>
-            </a>
-          </div>
-
-        </div>
-      </section>
-
+      <DailyPsalmCard reading={dailyReading} chileDate={chileDate} amenCount={amenCount} />
 
       {/* ========================================================
           3. BANNER OFICIAL DE WHATSAPP (Verde bosque)
@@ -439,29 +129,27 @@ export default function Home() {
         <div className="bg-[#0e3f2d] text-white rounded-2xl p-4 sm:p-5 border border-[#19523c] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
           <div className="flex items-center gap-3.5 text-center sm:text-left">
             <Image 
-              src="/whatsapp.svg"
-              alt="WhatsApp" 
+              src="/icon-email.png"
+              alt="Correo electrónico" 
               width={40} 
               height={40}
               className="w-10 h-10 object-contain brightness-0 invert shrink-0 mx-auto sm:mx-0"
             />
             <div>
               <h3 className="font-bold text-white text-sm sm:text-base leading-snug">
-                Oración matutina por WhatsApp
+                Oración matutina por correo
               </h3>
               <p className="text-xs text-emerald-200/90 leading-relaxed mt-0.5">
-                Recibe cada amanecer el Salmo del día y la oración en tu teléfono. Es gratuito y nadie puede ver tu número de contacto.
+                Recibe una lectura, reflexión y oración diaria en tu correo después de confirmar tu dirección.
               </p>
             </div>
           </div>
 
           <a
-            href="https://whatsapp.com/channel/cielosanto"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#oraciones-correo"
             className="shrink-0 bg-white hover:bg-stone-100 text-[#0e3f2d] font-bold text-xs py-2.5 px-5 rounded-full transition-colors shadow-sm"
           >
-            Seguir el canal →
+            Suscribirme →
           </a>
         </div>
       </section>
@@ -474,7 +162,7 @@ export default function Home() {
         {/* Imagen de fondo con roca, flores silvestres y atardecer */}
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/sosten-bg.jpg" 
+            src="/sosten-bg.webp" 
             alt="Flores silvestres al atardecer" 
             fill
             sizes="100vw"
@@ -546,254 +234,12 @@ export default function Home() {
       </section>
 
 
-      {/* ========================================================
-          5. SECCIÓN: MURO DE LA COMUNIDAD
-      ======================================================== */}
-      <section id="muro-oracion" className="py-20 px-4 max-w-5xl mx-auto w-full scroll-mt-20">
-        
-        {/* Encabezado del Muro con Icono Comunitario */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-1.5">
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="w-6 h-6 fill-none stroke-[#b77922]" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="3"/><path d="M5.5 20v-1.5a6.5 6.5 0 0 1 13 0V20M4.5 10.5a2.5 2.5 0 0 0 0 5m15-5a2.5 2.5 0 0 1 0 5M2.5 20v-1a4 4 0 0 1 2-3.5m17 4.5v-1a4 4 0 0 0-2-3.5"/></svg>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900">
-              Muro de la Comunidad
-            </h2>
-          </div>
-
-          <p className="text-stone-600 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
-            Puedes escribir una intención de salud, familia o trabajo. Los domingos unimos nuestras voces en el video comunitario de YouTube para interceder por las intenciones registradas aquí.
-          </p>
-
-          <button
-            onClick={() => setGuionModalOpen(true)}
-            className="text-stone-500 hover:text-stone-800 text-xs underline block mx-auto mt-2 transition-colors"
-          >
-            Conocer cómo funciona →
-          </button>
-        </div>
-
-        {/* Pestañas de Navegación del Muro */}
-        <div className="flex justify-center border-b border-stone-200 mb-8" role="tablist">
-          <button
-            onClick={() => setTabMuro("peticiones")}
-            role="tab"
-            aria-selected={tabMuro === "peticiones"}
-            className={`pb-3 px-6 text-xs sm:text-sm font-semibold transition-colors border-b-2 -mb-px ${
-              tabMuro === "peticiones"
-                ? "border-[#b25310] text-stone-900"
-                : "border-transparent text-stone-600 hover:text-stone-900"
-            }`}
-          >
-            Peticiones de oración (3.245)
-          </button>
-          <button
-            onClick={() => setTabMuro("agradecimientos")}
-            role="tab"
-            aria-selected={tabMuro === "agradecimientos"}
-            className={`pb-3 px-6 text-xs sm:text-sm font-semibold transition-colors border-b-2 -mb-px ${
-              tabMuro === "agradecimientos"
-                ? "border-[#b25310] text-stone-900"
-                : "border-transparent text-stone-600 hover:text-stone-900"
-            }`}
-          >
-            Testimonios y gratitud (862)
-          </button>
-        </div>
-
-        {/* Formulario blanco para compartir intención */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200 mb-8 shadow-sm">
-          <div className="flex items-center gap-2 mb-1">
-            <svg className="w-4 h-4 text-[#b25310]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-            <h3 className="font-semibold text-stone-900 text-sm sm:text-base">
-              {tabMuro === "peticiones" ? "Comparte una intención de oración" : "Comparte tu testimonio o gratitud"}
-            </h3>
-          </div>
-          
-          <p className="text-stone-500 text-xs mb-5">
-            Por respeto y cuidado de la privacidad familiar, evita incluir apellidos completos, números de teléfono o información médica confidencial.
-          </p>
-
-          <form onSubmit={handleSubmitPeticion} className="space-y-4">
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs text-stone-600 mb-1">
-                  Tu nombre o sólo la inicial
-                </label>
-                <input 
-                  type="text" 
-                  value={nombreInput}
-                  onChange={(e) => setNombreInput(e.target.value)}
-                  placeholder="Ejemplo: Carmen S. o Roberto"
-                  maxLength={80}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 text-stone-900 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#b25310]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs text-stone-600 mb-1">
-                  Visibilidad de tu mensaje
-                </label>
-                <div className="flex items-center gap-4 px-3 py-2 bg-stone-50 rounded-lg border border-stone-200 text-xs h-[42px]">
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input 
-                      type="radio" 
-                      name="privacidad" 
-                      value="publica" 
-                      checked={tipoPrivacidad === "publica"} 
-                      onChange={() => setTipoPrivacidad("publica")} 
-                      className="text-[#b25310] focus:ring-[#b25310]"
-                    />
-                    <span className="text-stone-700">Visible en el muro</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input 
-                      type="radio" 
-                      name="privacidad" 
-                      value="privada" 
-                      checked={tipoPrivacidad === "privada"} 
-                      onChange={() => setTipoPrivacidad("privada")} 
-                      className="text-[#b25310] focus:ring-[#b25310]"
-                    />
-                    <span className="text-stone-700">Solo equipo pastoral</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs text-stone-600 mb-1">
-                {tabMuro === "peticiones" ? "Mensaje o motivo de oración" : "Relato o motivo de gratitud"}
-              </label>
-              <textarea 
-                rows={3}
-                value={peticionInput}
-                onChange={(e) => setPeticionInput(e.target.value)}
-                placeholder="Escribe con sencillez lo que llevas en el corazón..."
-                maxLength={500}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 text-stone-900 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#b25310]"
-              ></textarea>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1">
-              <label className="flex items-center gap-2 cursor-pointer text-xs text-stone-600">
-                <input 
-                  type="checkbox" 
-                  checked={quiereNotificacion} 
-                  onChange={(e) => setQuiereNotificacion(e.target.checked)} 
-                  className="rounded text-[#b25310] focus:ring-[#b25310]"
-                />
-                <span>Deseo recibir un aviso por correo cuando alguien se una en oración por esta intención.</span>
-              </label>
-
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-[#9e4a06] hover:bg-[#853e05] disabled:opacity-50 text-white text-xs font-semibold py-2.5 px-5 rounded-lg transition-colors shrink-0 shadow-sm"
-              >
-                {isSubmitting ? "Publicando..." : tabMuro === "agradecimientos" ? "Publicar agradecimiento" : "Publicar intención"}
-              </button>
-            </div>
-
-            {submitSuccess && (
-              <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 px-4 py-2.5 rounded-lg text-xs mt-2">
-                Tu intención ha sido registrada con respeto en la comunidad.
-              </div>
-            )}
-          </form>
-        </div>
-
-        {/* Lista de Peticiones con Avatares */}
-        <div className="space-y-3.5">
-          {(tabMuro === "peticiones" ? peticiones : agradecimientos).map((p) => (
-            <article key={p.id} className="bg-white p-5 rounded-xl border border-stone-200/90 shadow-sm flex flex-col gap-2.5">
-              
-              <div className="flex justify-between items-start">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 relative bg-stone-100 border border-stone-200">
-                    <Image 
-                      src={p.avatar} 
-                      alt={p.nombre} 
-                      width={36} 
-                      height={36} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <span className="font-bold text-stone-900 text-xs sm:text-sm">{p.nombre}</span>
-                    <span className="text-[11px] text-stone-600 ml-2">· {p.tiempo}</span>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={() => handleReportar(p.id, tabMuro === "agradecimientos")}
-                  className="text-[11px] text-stone-600 hover:text-rose-600 transition-colors"
-                >
-                  Reportar
-                </button>
-              </div>
-
-              <p className="text-stone-700 text-xs sm:text-sm leading-relaxed pl-12">
-                {p.peticion}
-              </p>
-
-              <div className="flex items-center justify-between pt-2 border-t border-stone-100 pl-12 text-xs">
-                <button 
-                  onClick={() => handleApoyo(p.id, tabMuro === "agradecimientos")}
-                  className={`inline-flex items-center gap-1.5 transition-colors ${
-                    p.apoyado 
-                      ? 'text-[#b25310] font-semibold' 
-                      : 'text-stone-600 hover:text-stone-900'
-                  }`}
-                >
-                  <svg className={`w-3.5 h-3.5 ${p.apoyado ? 'fill-current text-[#b25310]' : 'text-stone-400'}`} fill={p.apoyado ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                  <span>Unirme en oración ({p.apoyos})</span>
-                </button>
-
-                <a 
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                    `Petición de oración en Cielo Santo por ${p.nombre}:\n"${p.peticion}"\n\nhttps://cielosanto.com/#muro-oracion`
-                  )}`}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-stone-600 hover:text-emerald-800 transition-colors inline-flex items-center gap-1.5 text-xs"
-                >
-                  <Image 
-                    src="/whatsapp.svg"
-                    alt="WhatsApp" 
-                    width={14} 
-                    height={14} 
-                    className="w-3.5 h-3.5 object-contain"
-                  />
-                  <span>Compartir en WhatsApp</span>
-                </a>
-              </div>
-
-            </article>
-          ))}
-        </div>
-
-        {/* Botón Ver más peticiones */}
-        <div className="text-center mt-6">
-          <button 
-            type="button"
-            className="bg-white hover:bg-stone-50 text-stone-700 font-medium text-xs px-6 py-2.5 rounded-full border border-stone-300 transition-colors shadow-sm inline-flex items-center gap-1.5"
-          >
-            <span>Ver más peticiones</span>
-            <span className="text-xs">→</span>
-          </button>
-        </div>
-
-      </section>
-
+      <PrayerWall initialPeticiones={wall.petitions} initialAgradecimientos={wall.thanks} available={wall.available} />
 
       {/* ========================================================
           6. SECCIÓN: DEVOCIONAL GRATUITO (Fondo pergamino con pinos)
       ======================================================== */}
-      <section className="relative py-20 px-6 text-center overflow-hidden bg-[#f4eee2] border-t border-[#e8dfce]">
+      <section id="oraciones-correo" className="relative py-20 px-6 text-center overflow-hidden bg-[#f4eee2] border-t border-[#e8dfce]">
         
         {/* Rama de olivo decorativa */}
         <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-40 h-auto pointer-events-none hidden md:block opacity-80">
@@ -809,7 +255,7 @@ export default function Home() {
         {/* Silueta de pinos y horizonte en la base, fundiéndose suavemente hacia la sección oscura */}
         <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 pointer-events-none overflow-hidden">
           <Image 
-            src="/hero-prayer.png"
+            src="/hero-prayer.webp"
             alt="Pinos y horizonte al amanecer" 
             fill
             sizes="100vw"
@@ -837,28 +283,7 @@ export default function Home() {
             Recibe en tu correo el versículo del día, una breve meditación y la oración guiada antes de salir al trabajo o iniciar tus tareas.
           </p>
 
-          {!newsletterSubscribed ? (
-            <form onSubmit={handleSubscribeNewsletter} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-              <input 
-                type="email" 
-                required
-                value={emailNewsletter}
-                onChange={(e) => setEmailNewsletter(e.target.value)}
-                placeholder="Tu correo electrónico..."
-                className="flex-1 px-4 py-2.5 rounded-lg border border-stone-300 text-stone-900 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-[#b25310] shadow-sm"
-              />
-              <button 
-                type="submit"
-                className="bg-[#9e4a06] hover:bg-[#853e05] text-white text-xs font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm shrink-0"
-              >
-                Recibir oraciones
-              </button>
-            </form>
-          ) : (
-            <div className="bg-white p-3.5 rounded-lg border border-stone-300 text-stone-800 text-xs">
-              Tu dirección ha sido registrada. Comenzarás a recibir la reflexión a partir de mañana.
-            </div>
-          )}
+          <NewsletterSignup />
 
         </div>
       </section>
@@ -890,7 +315,7 @@ export default function Home() {
               <div>
                 <div className="relative aspect-video w-full overflow-hidden group">
                   <Image 
-                    src="/hero-prayer.png"
+                    src="/hero-prayer.webp"
                     alt="Oración de la mañana" 
                     fill
                     sizes="(max-width: 768px) 100vw, 380px"
@@ -985,7 +410,7 @@ export default function Home() {
               <div>
                 <div className="relative aspect-video w-full overflow-hidden group">
                   <Image 
-                    src="/yt-thumb-hijos-real.jpg" 
+                    src="/yt-thumb-hijos-real.webp" 
                     alt="Oración por los hijos" 
                     fill
                     sizes="(max-width: 768px) 100vw, 380px"
@@ -1048,13 +473,6 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* Modal Guion Dominical para el creador */}
-      <ResumenSemanalModal
-        isOpen={guionModalOpen}
-        onClose={() => setGuionModalOpen(false)}
-        peticiones={peticiones}
-      />
 
     </main>
   );

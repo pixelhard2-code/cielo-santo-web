@@ -21,7 +21,7 @@ export default function CheckoutModal({ isOpen, onClose, item }: CheckoutModalPr
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   if (!isOpen || !item) return null;
 
@@ -30,66 +30,30 @@ export default function CheckoutModal({ isOpen, onClose, item }: CheckoutModalPr
     if (!email.trim() || !nombre.trim()) return;
 
     setLoading(true);
+    setError("");
 
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          itemType: item.type,
-          planName: item.title,
+          sku: item.id,
           amount: item.amount,
-          currency: item.currency,
           email,
           nombre,
         }),
       });
 
       const data = await res.json();
-
-      if (data.url) {
-        // Redirección real de Stripe
-        window.location.href = data.url;
-        return;
+      if (!res.ok || typeof data.url !== "string") {
+        throw new Error(data.error || "No se pudo iniciar el pago. No se ha realizado ningún cobro.");
       }
-
-      // Si está en modo demo o desarrollo sin Stripe keys
-      setSuccess(true);
-    } catch {
-      setSuccess(true);
+      window.location.assign(data.url);
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "No se pudo iniciar el pago.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDownloadSample = () => {
-    const devocionalTexto = `🕊️ CIELO SANTO — DEVOCIONAL: 30 DÍAS DE PAZ Y FORTALEZA
-========================================================================
-¡Gracias por tu apoyo al ministerio Cielo Santo, ${nombre || 'hermano/a'}!
-
-DÍA 1: "EL SEÑOR ES MI PASTOR" (Salmo 23:1)
-------------------------------------------------------------------------
-"El Señor es mi pastor; nada me faltará."
-
-REFLEXIÓN:
-El descanso espiritual no comienza cuando desaparecen los problemas externos,
-sino cuando reconocemos que nuestras cargas están en las mejores manos.
-Hoy, respira profundamente y entrega tu ansiedad a Dios.
-
-ORACIÓN DEL DÍA:
-"Padre celestial, gracias por ser mi pastor. Guía hoy mis decisiones,
-guarda la paz de mi hogar y renueva mis fuerzas. En tu nombre descanso. Amén."
-========================================================================
-Cielo Santo • youtube.com/@cielosanto20`;
-
-    const blob = new Blob([devocionalTexto], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "CieloSanto-Devocional-Muestra.txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -107,8 +71,7 @@ Cielo Santo • youtube.com/@cielosanto20`;
           </svg>
         </button>
 
-        {!success ? (
-          <div>
+        <div>
             <div className="text-center mb-6">
               <span className="text-amber-700 font-bold uppercase text-xs tracking-widest block mb-1">
                 {item.type === "donacion" ? "Ofrenda de Amor" : "Recurso Espiritual"}
@@ -151,8 +114,10 @@ Cielo Santo • youtube.com/@cielosanto20`;
                 />
                 <p className="text-[11px] text-slate-400 mt-1">
                   {item.type === "suscripcion"
-                    ? "Aquí recibirás las oraciones diarias cada mañana a las 7:00 AM."
-                    : "Aquí te enviaremos el enlace permanente y recibo seguro."}
+                    ? "Recibirás una oración y reflexión diaria. Podrás administrar o cancelar tu suscripción desde el correo de bienvenida."
+                    : item.type === "devocional"
+                      ? "Te enviaremos un enlace privado de descarga después de confirmar el pago."
+                      : "Usaremos tu correo para el recibo de la pasarela de pago."}
                 </p>
               </div>
 
@@ -165,7 +130,7 @@ Cielo Santo • youtube.com/@cielosanto20`;
                   <span>Conectando de forma segura...</span>
                 ) : (
                   <span>
-                    {item.type === "donacion" ? "Completar Ofrenda" : "Proceder al Pago Seguro"}
+                    {item.type === "donacion" ? "Continuar al pago seguro" : "Continuar al pago seguro"}
                   </span>
                 )}
               </button>
@@ -174,39 +139,11 @@ Cielo Santo • youtube.com/@cielosanto20`;
                 <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
-                <span>Transacción protegida con cifrado SSL de 256 bits</span>
+                <span>El pago se procesa en la pasarela segura seleccionada.</span>
               </div>
+              {error && <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-900">{error}</p>}
             </form>
-          </div>
-        ) : (
-          <div className="text-center py-4">
-            <div className="w-16 h-16 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
-              🕊️
-            </div>
-            <h3 className="text-2xl font-serif font-bold text-slate-900 mb-2">
-              ¡Que Dios te bendiga, {nombre}!
-            </h3>
-            <p className="text-slate-600 text-sm mb-6 leading-relaxed">
-              Hemos registrado tu solicitud para <strong>{item.title}</strong>. Te hemos enviado un correo de bienvenida a <em>{email}</em>.
-            </p>
-
-            {item.type === "devocional" && (
-              <button
-                onClick={handleDownloadSample}
-                className="w-full mb-3 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md active:scale-95"
-              >
-                📥 Descargar Devocional Ahora
-              </button>
-            )}
-
-            <button
-              onClick={onClose}
-              className="w-full bg-stone-100 hover:bg-stone-200 text-slate-700 font-medium py-3 px-6 rounded-xl transition-colors text-sm"
-            >
-              Cerrar y Regresar
-            </button>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

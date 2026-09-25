@@ -1,63 +1,12 @@
-"use client";
-import React, { useState } from 'react';
 import Image from 'next/image';
-import CheckoutModal, { ModalItem } from '@/components/CheckoutModal';
+import CheckoutButton from '@/components/CheckoutButton';
+
+export const metadata = {
+  title: 'Devocionales y lecturas',
+  description: 'Descarga lecturas gratuitas y encuentra recursos cristianos de oración y reflexión.',
+};
 
 export default function Productos() {
-  const [selectedItem, setSelectedItem] = useState<ModalItem | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [freeGuideEmail, setFreeGuideEmail] = useState("");
-  const [freeGuideDownloaded, setFreeGuideDownloaded] = useState(false);
-
-  const handleOpenCheckout = (item: ModalItem) => {
-    setSelectedItem(item);
-    setModalOpen(true);
-  };
-
-  const handleDownloadFreeGuide = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!freeGuideEmail.trim()) return;
-
-    const guiaTexto = `CIELO SANTO · GUÍA DE BOLSILLO: SIETE SALMOS PARA LA INQUIETUD Y EL DESCANSO
-========================================================================
-Esta pequeña selección de lecturas bíblicas fue preparada para acompañar
-tus noches de desvelo y aquellos momentos donde la mente se llena de afán.
-
-1. SALMO 27:1 — "EL SEÑOR ES MI LUZ Y MI SALVACIÓN"
-¿De quién temeré? Cuando la incertidumbre toque tu puerta, recuerda quién sostiene tu vida.
-
-2. SALMO 4:8 — "EN PAZ ME ACOSTARÉ Y ASIMISMO DORMIRÉ"
-Porque solo tú, Señor, me haces vivir confiado. Suelta la necesidad de controlar todo lo que ocurrirá mañana.
-
-3. SALMO 23:1-2 — "EL SEÑOR ES MI PASTOR; NADA ME FALTARÁ"
-En lugares de delicados pastos me hará descansar; junto a aguas de reposo me pastoreará.
-
-4. SALMO 46:1 — "DIOS ES NUESTRO AMPARO Y FORTALEZA"
-Nuestro pronto auxilio en las tribulaciones. Guarda silencio por unos minutos y reconoce su presencia.
-
-5. SALMO 91:1-2 — "EL QUE HABITA AL ABRIGO DEL ALTÍSIMO"
-Morará bajo la sombra del Omnipotente. Diré yo del Señor: Esperanza mía y castillo mío; mi Dios, en quien confiaré.
-
-6. SALMO 121:2-3 — "MI SOCORRO VIENE DEL SEÑOR"
-No dará tu pie al resbaladero, ni se dormirá el que te guarda. El Señor te guarda de todo mal.
-
-7. SALMO 55:22 — "ECHA SOBRE EL SEÑOR TU CARGA"
-Y Él te sustentará; no dejará para siempre caído al justo. Respira profundo y entrega tus pensamientos.
-========================================================================
-Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube: @cielosanto20`;
-
-    const blob = new Blob([guiaTexto], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Siete-Salmos-Para-El-Descanso-CieloSanto.txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    setFreeGuideDownloaded(true);
-  };
-
   return (
     <main className="min-h-screen pb-20">
       
@@ -91,7 +40,7 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
         <div className="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
           <div className="w-full md:w-44 h-36 md:h-40 relative rounded-xl overflow-hidden shrink-0 border border-stone-200 shadow-sm">
             <Image
-              src="/siete-salmos-cover.jpg"
+              src="/siete-salmos-cover.webp"
               alt="Guía de 7 Salmos para el descanso"
               fill
               sizes="(max-width: 768px) 100vw, 176px"
@@ -111,29 +60,15 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
             </p>
           </div>
 
-          <div className="w-full md:w-auto shrink-0">
-            {!freeGuideDownloaded ? (
-              <form onSubmit={handleDownloadFreeGuide} className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type="email"
-                  required
-                  value={freeGuideEmail}
-                  onChange={(e) => setFreeGuideEmail(e.target.value)}
-                  placeholder="Tu correo electrónico..."
-                  className="px-3.5 py-2.5 rounded-lg border border-stone-300 text-xs text-stone-900 bg-white focus:ring-1 focus:ring-stone-800"
-                />
-                <button
-                  type="submit"
-                  className="bg-stone-900 hover:bg-stone-800 text-white font-medium py-2.5 px-4 rounded-lg text-xs transition-colors shrink-0"
-                >
-                  Descargar lectura
-                </button>
-              </form>
-            ) : (
-              <div className="bg-emerald-50 text-emerald-900 px-4 py-2.5 rounded-lg border border-emerald-200 text-xs text-center">
-                Descarga iniciada. Esperamos que acompañe tu descanso esta noche.
-              </div>
-            )}
+          <div className="w-full md:w-auto shrink-0 text-center">
+            <a
+              href="/resources/siete-salmos-para-el-descanso.pdf"
+              download
+              className="inline-flex justify-center bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-5 rounded-lg text-sm transition-colors"
+            >
+              Descargar PDF gratuito
+            </a>
+            <p className="text-[11px] text-stone-500 mt-2">No necesitas compartir tu correo.</p>
           </div>
         </div>
       </section>
@@ -156,7 +91,7 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
           <div className="bg-white rounded-xl border border-stone-200 flex flex-col justify-between shadow-sm overflow-hidden">
             <div className="relative h-48 w-full">
               <Image 
-                src="/oraciones-alba.jpg" 
+                src="/oraciones-alba.webp" 
                 alt="Amanecer Oraciones del Alba" 
                 fill 
                 sizes="(max-width: 768px) 100vw, 500px" 
@@ -173,13 +108,12 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
               <div>
                 <h3 className="text-2xl font-serif font-bold text-stone-900 mb-2">Oraciones del Alba</h3>
                 <p className="text-stone-600 text-sm mb-6 leading-relaxed">
-                  Cada amanecer a las 7:00 AM recibirás una reflexión pausada, el Salmo del día y una oración guiada en tu bandeja de entrada antes de que comience el ruido de la jornada.
+                  Recibirás una lectura, reflexión original y oración en tu correo cada mañana.
                 </p>
                 
                 <div className="flex items-baseline gap-2 mb-6">
                   <span className="text-3xl font-serif font-bold text-stone-900">$2.990</span>
                   <span className="text-xs text-stone-500">CLP / mes</span>
-                  <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $3 USD)</span>
                 </div>
 
                 <ul className="space-y-3 mb-8 text-sm text-stone-700">
@@ -189,7 +123,7 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
                   </li>
                   <li className="flex items-start gap-2.5">
                     <span className="text-amber-800 font-bold">·</span>
-                    <span>Inclusión de tus intenciones personales en la oración comunitaria.</span>
+                    <span>Enlace privado para administrar o cancelar tu suscripción.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
                     <span className="text-amber-800 font-bold">·</span>
@@ -199,8 +133,8 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
               </div>
 
               <div>
-                <button 
-                  onClick={() => handleOpenCheckout({
+                <CheckoutButton
+                  item={{
                     id: 'suscripcion_alba',
                     title: 'Oraciones del Alba',
                     subtitle: 'Suscripción devocional diaria a las 7:00 AM',
@@ -208,12 +142,12 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
                     type: 'suscripcion',
                     amount: 2990,
                     currency: 'CLP',
-                  })}
+                  }}
                   className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
                 >
                   Suscribirme al envío diario
-                </button>
-                <p className="text-center text-[11px] text-stone-600 mt-2.5">Pago procesado mediante Mercado Pago y Webpay.</p>
+                </CheckoutButton>
+                <p className="text-center text-[11px] text-stone-600 mt-2.5">El medio de pago disponible se mostrará al continuar.</p>
               </div>
             </div>
           </div>
@@ -222,7 +156,7 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
           <div className="bg-white rounded-xl border border-stone-200 flex flex-col justify-between shadow-sm overflow-hidden">
             <div className="relative h-44 w-full">
               <Image 
-                src="/bible-bg.png" 
+                src="/bible-bg.webp" 
                 alt="30 días con los Salmos" 
                 fill 
                 sizes="(max-width: 768px) 100vw, 500px" 
@@ -239,13 +173,12 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
               <div>
                 <h3 className="text-2xl font-serif font-bold text-stone-900 mb-2">30 días con los Salmos</h3>
                 <p className="text-stone-600 text-sm mb-6 leading-relaxed">
-                  Un libro pensado para leer diez minutos cada día. Contiene treinta Salmos seleccionados, explicaciones sencillas de su contexto y oraciones para cerrar el momento de lectura.
+                  Treinta referencias bíblicas, reflexiones originales y oraciones breves para acompañarte en la mañana o al terminar el día.
                 </p>
                 
                 <div className="flex items-baseline gap-2 mb-6">
                   <span className="text-3xl font-serif font-bold text-stone-900">$4.990</span>
                   <span className="text-xs text-stone-500">CLP / pago único</span>
-                  <span className="text-xs text-stone-400 font-normal ml-1">(aprox. $5.20 USD)</span>
                 </div>
 
                 <ul className="space-y-3 mb-8 text-sm text-stone-700">
@@ -265,8 +198,8 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
               </div>
 
               <div>
-                <button 
-                  onClick={() => handleOpenCheckout({
+                <CheckoutButton
+                  item={{
                     id: 'devocional_30d',
                     title: '30 días con los Salmos',
                     subtitle: 'Devocional digital en PDF con 30 reflexiones de paz',
@@ -274,12 +207,12 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
                     type: 'devocional',
                     amount: 4990,
                     currency: 'CLP',
-                  })}
+                  }}
                   className="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
                 >
                   Comprar libro digital
-                </button>
-                <p className="text-center text-[11px] text-stone-600 mt-2.5">Disponible inmediatamente tras confirmar el aporte.</p>
+                </CheckoutButton>
+                <p className="text-center text-[11px] text-stone-600 mt-2.5">Recibirás un enlace de descarga privado después de confirmar el pago.</p>
               </div>
             </div>
           </div>
@@ -294,32 +227,25 @@ Cielo Santo · www.cielosanto.com · Oraciones y reflexiones diarias en YouTube:
           <div className="bg-white p-5 rounded-xl border border-stone-200">
             <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Cómo recibo el devocional tras el pago?</h3>
             <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-              Al finalizar el proceso verás un enlace de descarga directa en pantalla. Además, nuestro sistema te enviará automáticamente un correo con el archivo adjunto para que lo conserves siempre.
+              Después de confirmarse el pago, enviaremos a tu correo un enlace privado de descarga, válido durante 72 horas.
             </p>
           </div>
 
           <div className="bg-white p-5 rounded-xl border border-stone-200">
             <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Qué medios de pago están disponibles?</h3>
             <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-              En Chile puedes pagar con CuentaRUT, tarjetas de débito Redcompra y tarjetas de crédito mediante Mercado Pago y Webpay.
+              El medio de pago disponible para tu compra aparecerá antes de salir al proceso de pago. Los precios se cobran en pesos chilenos.
             </p>
           </div>
 
           <div className="bg-white p-5 rounded-xl border border-stone-200">
             <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Cómo se cancela la suscripción mensual si ya no deseo recibirla?</h3>
             <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-              Cada correo electrónico incluye un enlace al pie para cancelar la suscripción en un solo paso. También puedes escribirnos a contacto@cielosanto.com y la cancelaremos de inmediato.
+              El correo de bienvenida incluye acceso al portal seguro para administrar o cancelar la suscripción.
             </p>
           </div>
         </div>
       </section>
-
-      {/* Modal interactivo de checkout */}
-      <CheckoutModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        item={selectedItem}
-      />
 
     </main>
   );

@@ -21,7 +21,7 @@ aliases:
 
 ## 1. Datos Demográficos y Geográficos Generales
 
-- **Edades Predominantes**: 35 a 65+ años (fuerte presencia de 45-60 años, especialmente en interacción y donaciones).
+- **Edades Predominantes**: 25 a 65+ años (fuerte presencia de 35-60 años, especialmente en interacción y donaciones).
 - **Género**: 65% Mujeres, 35% Hombres (distribución típica de comunidades devocionales y de intercesión en YouTube/Facebook).
 - **Geografía Clave**:
   - **Chile**: Mercado inicial (foco actual del catálogo con precios en CLP).

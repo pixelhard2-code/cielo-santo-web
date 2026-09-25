@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import AudioPlayer from "@/components/AudioPlayer";
 
 const spectral = Spectral({
   subsets: ["latin"],
@@ -20,6 +21,7 @@ const sourceSans = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://cielosanto.com"),
   title: {
     default: "Cielo Santo | Oración, Fe y Esperanza",
     template: "%s | Cielo Santo",
@@ -35,6 +37,13 @@ export const metadata: Metadata = {
     siteName: "Cielo Santo",
     locale: "es_LA",
     type: "website",
+    images: ["/hero-prayer.webp"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cielo Santo | Oración, Fe y Esperanza",
+    description: "Lecturas diarias, oración comunitaria y acompañamiento con los Salmos.",
+    images: ["/hero-prayer.webp"],
   },
 };
 
@@ -142,19 +151,6 @@ export default function RootLayout({
                       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                   </a>
-                  <a 
-                    href="https://instagram.com" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors"
-                    aria-label="Instagram"
-                  >
-                    <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-                    </svg>
-                  </a>
                 </div>
               </div>
             </div>
@@ -176,6 +172,7 @@ export default function RootLayout({
 
           </div>
         </footer>
+        <AudioPlayer />
       </body>
     </html>
   );

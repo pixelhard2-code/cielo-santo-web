@@ -1,38 +1,13 @@
-"use client";
-import React, { useState } from 'react';
 import Image from 'next/image';
-import CheckoutModal, { ModalItem } from '@/components/CheckoutModal';
-import VideoModal from '@/components/VideoModal';
+import CheckoutButton from '@/components/CheckoutButton';
+import CustomDonationForm from '@/components/CustomDonationForm';
+
+export const metadata = {
+  title: 'Sostén y misión',
+  description: 'Conoce cómo sostener Cielo Santo y cómo se separan los recursos digitales de la ayuda solidaria.',
+};
 
 export default function Donaciones() {
-  const [checkoutItem, setCheckoutItem] = useState<ModalItem | null>(null);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [videoOpen, setVideoOpen] = useState(false);
-  const [montoPersonalizado, setMontoPersonalizado] = useState("");
-
-  const handleOpenAporte = (monto: number, titulo: string, subtitulo: string) => {
-    setCheckoutItem({
-      id: `aporte_${monto}`,
-      title: titulo,
-      subtitle: subtitulo,
-      priceDisplay: `$${monto.toLocaleString('es-CL')} CLP (aprox. $${(monto / 950).toFixed(1)} USD)`,
-      type: 'donacion',
-      amount: monto,
-      currency: 'CLP',
-    });
-    setCheckoutOpen(true);
-  };
-
-  const handleCustomAporte = (e: React.FormEvent) => {
-    e.preventDefault();
-    const val = Number(montoPersonalizado);
-    if (!val || val < 1000) {
-      alert("Por favor ingresa un monto a partir de $1.000 CLP.");
-      return;
-    }
-    handleOpenAporte(val, "Aporte Voluntario a Cielo Santo", "Colaboración para el sostenimiento del espacio de oración");
-  };
-
   return (
     <main className="min-h-screen pb-20">
       
@@ -64,12 +39,10 @@ export default function Donaciones() {
       {/* 2. VIDEO / MENSAJE DEL EQUIPO */}
       <section className="max-w-4xl mx-auto px-5 -mt-16 relative z-20 mb-16">
         <div className="bg-white p-2 rounded-2xl border border-stone-200 shadow-sm">
-          <div 
-            onClick={() => setVideoOpen(true)}
-            className="relative rounded-xl overflow-hidden aspect-video bg-stone-800 flex items-center justify-center group cursor-pointer"
-          >
+          <a href="https://youtube.com/@cielosanto20" target="_blank" rel="noopener noreferrer"
+            className="relative rounded-xl overflow-hidden aspect-video bg-stone-800 flex items-center justify-center group">
             <Image 
-              src="/solidarity-community.jpg" 
+              src="/solidarity-community.webp" 
               alt="Comunidad reunida y ayuda solidaria" 
               fill
               sizes="(max-width: 1024px) 100vw, 896px"
@@ -82,10 +55,10 @@ export default function Donaciones() {
             </div>
             
             <div className="absolute bottom-5 left-5 right-5 text-left">
-              <p className="text-white font-serif font-bold text-lg sm:text-xl">Un mensaje sobre el destino de los aportes</p>
-              <p className="text-stone-300 text-xs mt-0.5">Palabras de nuestro equipo sobre el trabajo diario (3:15 min)</p>
+              <p className="text-white font-serif font-bold text-lg sm:text-xl">Conoce el canal de Cielo Santo</p>
+              <p className="text-stone-300 text-xs mt-0.5">Ver oraciones y reflexiones en YouTube</p>
             </div>
-          </div>
+          </a>
         </div>
       </section>
 
@@ -104,7 +77,7 @@ export default function Donaciones() {
           <div className="bg-white rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between overflow-hidden">
             <div className="relative h-44 w-full">
               <Image 
-                src="/bible-bg.png" 
+                src="/bible-bg.webp" 
                 alt="Producción devocional y estudio bíblico" 
                 fill 
                 sizes="(max-width: 768px) 100vw, 500px" 
@@ -132,7 +105,7 @@ export default function Donaciones() {
           <div className="bg-white rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between overflow-hidden">
             <div className="relative h-44 w-full">
               <Image 
-                src="/solidarity-community.jpg" 
+                src="/solidarity-community.webp" 
                 alt="Ayuda solidaria y comedores" 
                 fill 
                 sizes="(max-width: 768px) 100vw, 500px" 
@@ -216,14 +189,10 @@ export default function Donaciones() {
                 Colabora con el costo de servidores y distribución de reflexiones diarias.
               </p>
               <div className="text-3xl font-serif font-bold text-stone-900 mb-0.5">$3.000 <span className="text-xs font-sans text-stone-500 font-normal">CLP</span></div>
-              <div className="text-[11px] text-stone-400 mb-6">Aproximadamente $3 USD</div>
             </div>
-            <button 
-              onClick={() => handleOpenAporte(3000, "Aporte Voluntario $3.000 CLP", "Sostenimiento del ministerio Cielo Santo")}
-              className="w-full bg-stone-100 hover:bg-stone-200 text-stone-800 font-medium py-3 rounded-lg transition-colors text-sm"
-            >
+            <CheckoutButton item={{ id: 'aporte_operativo', title: 'Aporte de sostenimiento', subtitle: 'Sostenimiento de la plataforma y sus contenidos', priceDisplay: '$3.000 CLP', type: 'donacion', amount: 3000, currency: 'CLP' }} className="w-full bg-stone-100 hover:bg-stone-200 text-stone-800 font-medium py-3 rounded-lg transition-colors text-sm">
               Aportar $3.000
-            </button>
+            </CheckoutButton>
           </div>
 
           {/* APORTE 2 */}
@@ -234,14 +203,10 @@ export default function Donaciones() {
                 Ayuda a financiar los devocionales y la entrega de alimentos no perecibles.
               </p>
               <div className="text-3xl font-serif font-bold text-stone-900 mb-0.5">$10.000 <span className="text-xs font-sans text-stone-500 font-normal">CLP</span></div>
-              <div className="text-[11px] text-stone-400 mb-6">Aproximadamente $10.5 USD</div>
             </div>
-            <button 
-              onClick={() => handleOpenAporte(10000, "Aporte Solidario $10.000 CLP", "Sostenimiento digital y apoyo a comedores")}
-              className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3 rounded-lg transition-colors text-sm"
-            >
+            <CheckoutButton item={{ id: 'aporte_solidario', title: 'Aporte solidario', subtitle: 'Apoyo para el trabajo comunitario', priceDisplay: '$10.000 CLP', type: 'donacion', amount: 10000, currency: 'CLP' }} className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3 rounded-lg transition-colors text-sm">
               Aportar $10.000
-            </button>
+            </CheckoutButton>
           </div>
 
           {/* APORTE 3 */}
@@ -252,14 +217,10 @@ export default function Donaciones() {
                 Contribuye a la producción continua de oraciones y materiales de apoyo familiar.
               </p>
               <div className="text-3xl font-serif font-bold text-stone-900 mb-0.5">$25.000 <span className="text-xs font-sans text-stone-500 font-normal">CLP</span></div>
-              <div className="text-[11px] text-stone-400 mb-6">Aproximadamente $26 USD</div>
             </div>
-            <button 
-              onClick={() => handleOpenAporte(25000, "Aporte de Continuidad $25.000 CLP", "Continuidad de oraciones y proyectos comunitarios")}
-              className="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 rounded-lg transition-colors text-sm"
-            >
+            <CheckoutButton item={{ id: 'aporte_continuidad', title: 'Aporte de continuidad', subtitle: 'Continuidad de oraciones y proyectos comunitarios', priceDisplay: '$25.000 CLP', type: 'donacion', amount: 25000, currency: 'CLP' }} className="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 rounded-lg transition-colors text-sm">
               Aportar $25.000
-            </button>
+            </CheckoutButton>
           </div>
 
         </div>
@@ -267,38 +228,9 @@ export default function Donaciones() {
         {/* Formulario de Aporte con Monto Personalizado */}
         <div className="max-w-md mx-auto bg-white p-5 rounded-xl border border-stone-200 text-center">
           <p className="font-medium text-stone-800 text-xs mb-3">Si deseas colaborar con un monto diferente:</p>
-          <form onSubmit={handleCustomAporte} className="flex gap-2 justify-center">
-            <input
-              type="number"
-              min="1000"
-              step="500"
-              value={montoPersonalizado}
-              onChange={(e) => setMontoPersonalizado(e.target.value)}
-              placeholder="Monto en CLP (ej. 5000)..."
-              className="px-3.5 py-2 rounded-lg border border-stone-300 text-xs text-stone-900 w-52 focus:ring-1 focus:ring-stone-800"
-            />
-            <button
-              type="submit"
-              className="bg-stone-900 hover:bg-stone-800 text-white font-medium px-4 py-2 rounded-lg text-xs transition-colors"
-            >
-              Continuar
-            </button>
-          </form>
+          <CustomDonationForm />
         </div>
       </section>
-
-      {/* Modales */}
-      <CheckoutModal
-        isOpen={checkoutOpen}
-        onClose={() => setCheckoutOpen(false)}
-        item={checkoutItem}
-      />
-
-      <VideoModal
-        isOpen={videoOpen}
-        onClose={() => setVideoOpen(false)}
-        videoTitle="La Obra de Cielo Santo y Pan y Abrigo"
-      />
 
     </main>
   );

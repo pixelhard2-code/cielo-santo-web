@@ -55,7 +55,7 @@ export default function Nosotros() {
           <div className="md:col-span-5">
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-stone-200 shadow-md">
               <Image 
-                src="/nosotros-study.jpg" 
+                src="/nosotros-study.webp" 
                 alt="Biblia de estudio, té matutino y lectura reflexiva" 
                 fill
                 sizes="(max-width: 768px) 100vw, 400px"
@@ -163,7 +163,7 @@ export default function Nosotros() {
             <div className="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm flex flex-col">
               <div className="relative h-36 w-full">
                 <Image 
-                  src="/oraciones-alba.jpg" 
+                  src="/oraciones-alba.webp" 
                   alt="Acompañamiento devocional digital" 
                   fill 
                   sizes="(max-width: 768px) 100vw, 400px" 
@@ -181,7 +181,7 @@ export default function Nosotros() {
             <div className="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm flex flex-col">
               <div className="relative h-36 w-full">
                 <Image 
-                  src="/solidarity-community.jpg" 
+                  src="/solidarity-community.webp" 
                   alt="Acción solidaria y comedores" 
                   fill 
                   sizes="(max-width: 768px) 100vw, 400px" 

@@ -19,6 +19,8 @@
 
 # production
 /build
+/output/
+/private-resources/
 
 # misc
 .DS_Store
