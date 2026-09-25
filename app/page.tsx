@@ -174,7 +174,7 @@ export default function Home() {
             En nuestros Shorts compartimos la oración de la mañana y oramos colectivamente por las intenciones de este muro.
           </p>
           <a 
-            href="https://youtube.com/@cielosanto" 
+            href="https://youtube.com/@cielosanto20" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold transition-colors shadow-lg gap-3"
