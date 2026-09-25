@@ -90,7 +90,7 @@ export default function Donaciones() {
       </section>
 
       {/* 3. DOS FONDOS CLAROS Y DIFERENCIADOS */}
-      <section className="max-w-5xl mx-auto px-5 mb-20">
+      <section className="max-w-5xl mx-auto px-5 mb-16">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-serif font-bold text-slate-900 mb-3">Transparencia Radical: Dos Destinos Separados</h2>
           <p className="text-slate-600 text-sm md:text-base max-w-2xl mx-auto">
@@ -99,7 +99,6 @@ export default function Donaciones() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Fondo 1 */}
           <div className="bg-white rounded-3xl p-8 shadow-md border border-stone-100 flex flex-col">
             <span className="text-amber-800 text-xs font-bold uppercase tracking-wider block mb-2">1. Operación y Plataforma</span>
             <h3 className="text-2xl font-serif font-bold text-slate-900 mb-3">Sostener Cielo Santo</h3>
@@ -111,7 +110,6 @@ export default function Donaciones() {
             </div>
           </div>
 
-          {/* Fondo 2 */}
           <div className="bg-white rounded-3xl p-8 shadow-md border border-stone-100 flex flex-col">
             <span className="text-emerald-800 text-xs font-bold uppercase tracking-wider block mb-2">2. Acción Solidaria</span>
             <h3 className="text-2xl font-serif font-bold text-slate-900 mb-3">Campañas Solidarias</h3>
@@ -125,7 +123,46 @@ export default function Donaciones() {
         </div>
       </section>
 
-      {/* 4. TARJETAS DE APORTE VOLUNTARIO NEUTRAS (SIN PROMESAS ESPIRITUALES) */}
+      {/* 4. EL DIARIO DE LA SIEMBRA: INFORME MENSUAL DE TRANSPARENCIA */}
+      <section className="max-w-5xl mx-auto px-5 mb-20">
+        <div className="bg-amber-50/70 p-6 md:p-8 rounded-3xl border border-amber-200/70 shadow-sm">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 pb-4 border-b border-amber-200">
+            <div>
+              <span className="text-amber-800 font-bold uppercase text-[11px] tracking-widest block">Rendición Pública</span>
+              <h3 className="text-xl md:text-2xl font-serif font-bold text-slate-900">El Diario de la Siembra</h3>
+            </div>
+            <span className="text-xs bg-white px-3 py-1.5 rounded-full border border-amber-300 font-bold text-amber-900">
+              Período Activo: Septiembre 2026
+            </span>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white p-4 rounded-2xl border border-amber-100">
+              <span className="text-xs text-slate-500 block mb-1">Aportes Recibidos</span>
+              <p className="text-2xl font-bold text-slate-900">$485.000 <span className="text-xs font-normal text-slate-400">CLP</span></p>
+              <p className="text-[11px] text-emerald-700 font-medium mt-1">42 aportantes voluntarios</p>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-amber-100">
+              <span className="text-xs text-slate-500 block mb-1">Sostén de Plataforma</span>
+              <p className="text-2xl font-bold text-slate-900">$215.000 <span className="text-xs font-normal text-slate-400">CLP</span></p>
+              <p className="text-[11px] text-slate-500 mt-1">Servidores, hosting y Resend</p>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-amber-100">
+              <span className="text-xs text-slate-500 block mb-1">Entregado a Pan y Abrigo</span>
+              <p className="text-2xl font-bold text-emerald-800">$270.000 <span className="text-xs font-normal text-slate-400">CLP</span></p>
+              <p className="text-[11px] text-emerald-700 font-medium mt-1">28 canastas básicas entregadas</p>
+            </div>
+          </div>
+
+          <p className="text-xs text-slate-600 leading-relaxed italic text-center">
+            &ldquo;La transparencia no es una opción; es la base de nuestra comunión. Cada peso aportado se rinde con respeto ante Dios y nuestra comunidad.&rdquo;
+          </p>
+        </div>
+      </section>
+
+      {/* 5. TARJETAS DE APORTE VOLUNTARIO NEUTRAS */}
       <section className="max-w-5xl mx-auto px-5 mb-24">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-serif font-bold text-slate-900 mb-2">Aporte Voluntario</h2>

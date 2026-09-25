@@ -5,10 +5,56 @@ import CheckoutModal, { ModalItem } from '@/components/CheckoutModal';
 export default function Productos() {
   const [selectedItem, setSelectedItem] = useState<ModalItem | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [freeGuideEmail, setFreeGuideEmail] = useState("");
+  const [freeGuideDownloaded, setFreeGuideDownloaded] = useState(false);
 
   const handleOpenCheckout = (item: ModalItem) => {
     setSelectedItem(item);
     setModalOpen(true);
+  };
+
+  const handleDownloadFreeGuide = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!freeGuideEmail.trim()) return;
+
+    const guiaTexto = `🕊️ CIELO SANTO — GUÍA DE BOLSILLO: 7 SALMOS PARA LA ANSIEDAD Y EL INSOMNIO
+========================================================================
+¡Paz y bien! Esta guía fue preparada para acompañarte en tus noches de desvelo
+y en esos momentos donde la mente se llena de preocupación.
+
+SALMO 1: "EL SEÑOR ES MI LUZ Y MI SALVACIÓN" (Salmo 27:1)
+¿De quién temeré? Cuando el miedo toque a tu puerta, recuerda quién cuida de ti.
+
+SALMO 2: "EN PAZ ME ACOSTARÉ Y ASIMISMO DORMIRÉ" (Salmo 4:8)
+Porque solo tú, Señor, me haces vivir confiado. Suelta la necesidad de controlar todo.
+
+SALMO 3: "EL SEÑOR ES MI PASTOR; NADA ME FALTARÁ" (Salmo 23:1-2)
+En lugares de delicados pastos me hará descansar; junto a aguas de reposo me pastoreará.
+
+SALMO 4: "DIOS ES NUESTRO AMPARO Y FORTALEZA" (Salmo 46:1)
+Nuestro pronto auxilio en las tribulaciones. Quédate quieto y conoce que Él es Dios.
+
+SALMO 5: "EL QUE HABITA AL ABRIGO DEL ALTÍSIMO" (Salmo 91:1-2)
+Morará bajo la sombra del Omnipotente. Ninguna plaga tocará tu morada.
+
+SALMO 6: "MI SOCORRO VIENE DEL SEÑOR" (Salmo 121:1-3)
+No dará tu pie al resbaladero, ni se dormirá el que te guarda.
+
+SALMO 7: "ECHA SOBRE EL SEÑOR TU CARGA" (Salmo 55:Respira y entrega)
+Y Él te sustentará; no dejará para siempre caído al justo.
+========================================================================
+Cielo Santo • www.cielosanto.com • Canal oficial de YouTube: @cielosanto20`;
+
+    const blob = new Blob([guiaTexto], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "7-Salmos-Ansiedad-CieloSanto.txt";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setFreeGuideDownloaded(true);
   };
 
   return (
@@ -28,8 +74,50 @@ export default function Productos() {
         </div>
       </section>
 
-      {/* 2. TARJETAS DE RECURSOS */}
-      <section className="max-w-5xl mx-auto px-5 -mt-10 relative z-20">
+      {/* 2. LEAD MAGNET GRATUITO: GUÍA DE 7 SALMOS */}
+      <section className="max-w-4xl mx-auto px-5 -mt-10 relative z-20 mb-14">
+        <div className="bg-amber-100/90 rounded-3xl p-6 md:p-8 border border-amber-300 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex-1 text-center md:text-left">
+            <span className="bg-amber-800 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+              Recurso Gratuito de Bienvenida
+            </span>
+            <h3 className="text-2xl font-serif font-bold text-amber-950 mb-2">
+              7 Salmos para la Ansiedad y el Insomnio
+            </h3>
+            <p className="text-slate-700 text-xs md:text-sm leading-relaxed">
+              Una guía de bolsillo en formato digital diseñada para leer en la cama o en momentos de angustia. Descárgala sin costo.
+            </p>
+          </div>
+
+          <div className="w-full md:w-auto shrink-0">
+            {!freeGuideDownloaded ? (
+              <form onSubmit={handleDownloadFreeGuide} className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="email"
+                  required
+                  value={freeGuideEmail}
+                  onChange={(e) => setFreeGuideEmail(e.target.value)}
+                  placeholder="Tu correo electrónico..."
+                  className="px-4 py-3 rounded-xl border border-amber-300 text-xs text-slate-800 bg-white focus:ring-2 focus:ring-amber-500"
+                />
+                <button
+                  type="submit"
+                  className="bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 px-5 rounded-xl text-xs transition-all shadow-md active:scale-95 shrink-0"
+                >
+                  📥 Descargar Gratis
+                </button>
+              </form>
+            ) : (
+              <div className="bg-white text-emerald-800 px-5 py-3 rounded-xl border border-emerald-300 text-xs font-bold text-center">
+                ✓ ¡Descarga iniciada! Esperamos que sea de bendición para tu descanso.
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. TARJETAS DE RECURSOS */}
+      <section className="max-w-5xl mx-auto px-5 relative z-20">
         <div className="grid md:grid-cols-2 gap-8">
           
           {/* PRODUCTO 1: Suscripción */}
@@ -132,7 +220,7 @@ export default function Productos() {
         </div>
       </section>
 
-      {/* 3. SEÑALES DE CONFIANZA */}
+      {/* 4. SEÑALES DE CONFIANZA */}
       <section className="max-w-4xl mx-auto px-5 mt-16 text-center">
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 py-8 border-y border-stone-200">
           <div className="flex items-center gap-3">
@@ -153,7 +241,7 @@ export default function Productos() {
         </div>
       </section>
 
-      {/* 4. PREGUNTAS FRECUENTES */}
+      {/* 5. PREGUNTAS FRECUENTES */}
       <section className="max-w-3xl mx-auto px-5 mt-20">
         <h2 className="text-2xl font-serif font-bold text-slate-900 mb-8 text-center">Preguntas Frecuentes</h2>
         <div className="space-y-6">

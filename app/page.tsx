@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import CampanaDonacion from '@/components/CampanaDonacion';
+import AudioPlayer from '@/components/AudioPlayer';
+import ResumenSemanalModal from '@/components/ResumenSemanalModal';
 
 interface Peticion {
   id: string | number;
@@ -11,6 +13,7 @@ interface Peticion {
   apoyos: number;
   apoyado?: boolean;
   esPrivada?: boolean;
+  esAgradecimiento?: boolean;
   reportado?: boolean;
 }
 
@@ -20,13 +23,21 @@ const peticionesIniciales: Peticion[] = [
   { id: 3, nombre: "Gloria S.", peticion: "Agradeciendo por un día más de vida y pidiendo fortaleza espiritual.", apoyos: 45, apoyado: false },
 ];
 
+const agradecimientosIniciales: Peticion[] = [
+  { id: 101, nombre: "Elena M.", peticion: "Doy gracias a Dios y a quienes oraron por mí; mi esposo salió bien de su biopsia y ya está en casa recuperándose en paz.", apoyos: 34, apoyado: false, esAgradecimiento: true },
+  { id: 102, nombre: "Andrés V.", peticion: "Encontré una tranquilidad y descanso nocturno que no sentía hace meses. Gracias hermanos por sus plegarias.", apoyos: 22, apoyado: false, esAgradecimiento: true },
+  { id: 103, nombre: "Patricia C.", peticion: "Mi hijo encontró empleo esta semana tras meses de búsqueda. La oración comunitaria de este santuario tiene poder.", apoyos: 51, apoyado: false, esAgradecimiento: true },
+];
+
 export default function Home() {
   // Estado del contador de Amén
   const [amenCount, setAmenCount] = useState(142);
   const [hasClickedAmen, setHasClickedAmen] = useState(false);
 
-  // Estados del Muro de Peticiones
+  // Estados del Muro
+  const [tabMuro, setTabMuro] = useState<"peticiones" | "agradecimientos">("peticiones");
   const [peticiones, setPeticiones] = useState<Peticion[]>(peticionesIniciales);
+  const [agradecimientos, setAgradecimientos] = useState<Peticion[]>(agradecimientosIniciales);
   const [nombreInput, setNombreInput] = useState("");
   const [peticionInput, setPeticionInput] = useState("");
   const [emailNotifInput, setEmailNotifInput] = useState("");
@@ -36,6 +47,7 @@ export default function Home() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [mensajeApoyoActivo, setMensajeApoyoActivo] = useState<{ id: string | number; texto: string } | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [guionModalOpen, setGuionModalOpen] = useState(false);
 
   // Estado del Newsletter gratuito
   const [emailNewsletter, setEmailNewsletter] = useState("");
@@ -60,7 +72,7 @@ export default function Home() {
 
         if (guardadas) {
           const parsed: Peticion[] = JSON.parse(guardadas);
-          setPeticiones(parsed.filter(p => !p.esPrivada).map(p => ({
+          setPeticiones(parsed.filter(p => !p.esPrivada && !p.esAgradecimiento).map(p => ({
             ...p,
             apoyado: apoyadasGuardadas.includes(String(p.id))
           })));
@@ -102,50 +114,58 @@ export default function Home() {
     }
   };
 
-  const handleApoyo = (id: string | number) => {
+  const handleApoyo = (id: string | number, esAgr = false) => {
     const idStr = String(id);
-    const peticionEncontrada = peticiones.find(p => String(p.id) === idStr);
+    const lista = esAgr ? agradecimientos : peticiones;
+    const peticionEncontrada = lista.find(p => String(p.id) === idStr);
     const nuevosApoyos = (peticionEncontrada?.apoyos || 0) + 1;
 
-    setPeticiones(prev => {
-      const actualizadas = prev.map(item => {
-        if (String(item.id) === idStr && !item.apoyado) {
-          return { ...item, apoyos: item.apoyos + 1, apoyado: true };
-        }
-        return item;
-      });
-
-      try {
-        const apoyadasGuardadas: string[] = JSON.parse(localStorage.getItem('cielosanto_apoyadas') || '[]');
-        if (!apoyadasGuardadas.includes(idStr)) {
-          localStorage.setItem('cielosanto_apoyadas', JSON.stringify([...apoyadasGuardadas, idStr]));
-        }
-        localStorage.setItem('cielosanto_peticiones_locales', JSON.stringify(actualizadas));
-      } catch {}
-
-      return actualizadas;
+    const actualizar = (prev: Peticion[]) => prev.map(item => {
+      if (String(item.id) === idStr && !item.apoyado) {
+        return { ...item, apoyos: item.apoyos + 1, apoyado: true };
+      }
+      return item;
     });
+
+    if (esAgr) {
+      setAgradecimientos(actualizar);
+    } else {
+      setPeticiones(actualizar);
+    }
+
+    try {
+      const apoyadasGuardadas: string[] = JSON.parse(localStorage.getItem('cielosanto_apoyadas') || '[]');
+      if (!apoyadasGuardadas.includes(idStr)) {
+        localStorage.setItem('cielosanto_apoyadas', JSON.stringify([...apoyadasGuardadas, idStr]));
+      }
+    } catch {}
 
     if (peticionEncontrada) {
       setMensajeApoyoActivo({
         id,
-        texto: `🤍 Gracias. Hoy estás orando junto a otras ${nuevosApoyos} personas por ${peticionEncontrada.nombre}.`
+        texto: esAgr 
+          ? `🕊️ ¡Amén! Nos alegramos junto a ${peticionEncontrada.nombre} por esta bendición compartida.`
+          : `🤍 Gracias. Hoy estás orando junto a otras ${nuevosApoyos} personas por ${peticionEncontrada.nombre}.`
       });
     }
   };
 
-  const handleReportar = (id: string | number) => {
-    const confirmar = window.confirm("¿Deseas reportar esta intención para revisión del equipo de moderación?");
+  const handleReportar = (id: string | number, esAgr = false) => {
+    const confirmar = window.confirm("¿Deseas reportar este contenido para revisión del equipo de moderación?");
     if (confirmar) {
-      setPeticiones(prev => prev.filter(p => p.id !== id));
-      alert("La intención ha sido reportada y enviada a moderación. Gracias por cuidar nuestro santuario.");
+      if (esAgr) {
+        setAgradecimientos(prev => prev.filter(p => p.id !== id));
+      } else {
+        setPeticiones(prev => prev.filter(p => p.id !== id));
+      }
+      alert("El mensaje ha sido reportado y enviado a moderación. Gracias por cuidar nuestro santuario.");
     }
   };
 
   const handleSubmitPeticion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nombreInput.trim() || !peticionInput.trim()) {
-      setErrorMessage("Por favor ingresa tu nombre y tu petición de oración.");
+      setErrorMessage("Por favor ingresa tu nombre y tu mensaje.");
       return;
     }
 
@@ -153,6 +173,7 @@ export default function Home() {
     setErrorMessage("");
 
     const esPrivada = tipoPrivacidad === "privada";
+    const esAgradecimiento = tabMuro === "agradecimientos";
 
     const nueva: Peticion = {
       id: Date.now(),
@@ -161,14 +182,19 @@ export default function Home() {
       apoyos: 1,
       apoyado: true,
       esPrivada,
+      esAgradecimiento,
     };
 
     if (!esPrivada) {
-      const actualizadas = [nueva, ...peticiones];
-      setPeticiones(actualizadas);
-      try {
-        localStorage.setItem('cielosanto_peticiones_locales', JSON.stringify(actualizadas));
-      } catch {}
+      if (esAgradecimiento) {
+        setAgradecimientos([nueva, ...agradecimientos]);
+      } else {
+        const actualizadas = [nueva, ...peticiones];
+        setPeticiones(actualizadas);
+        try {
+          localStorage.setItem('cielosanto_peticiones_locales', JSON.stringify(actualizadas));
+        } catch {}
+      }
     }
 
     try {
@@ -179,7 +205,8 @@ export default function Home() {
           nombre: nueva.nombre, 
           peticion: nueva.peticion,
           email: quiereNotificacion ? emailNotifInput.trim() : undefined,
-          esPrivada
+          esPrivada,
+          esAgradecimiento
         }),
       });
     } catch {
@@ -298,27 +325,86 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. CAMPAÑA DE SOSTÉN */}
+      {/* 3. BANNER CANAL OFICIAL DE WHATSAPP (Viralidad sin fricción) */}
+      <section className="px-5 mt-8 max-w-3xl mx-auto w-full">
+        <div className="bg-emerald-950 text-emerald-100 rounded-2xl p-5 border border-emerald-800 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-center sm:text-left">
+            <div className="w-12 h-12 rounded-full bg-emerald-800/80 flex items-center justify-center text-2xl shrink-0">
+              📲
+            </div>
+            <div>
+              <h4 className="font-bold text-white text-sm">Canal Oficial de WhatsApp de Cielo Santo</h4>
+              <p className="text-xs text-emerald-200">Recibe la oración y el Salmo cada amanecer directamente en tu teléfono (100% privado y gratuito).</p>
+            </div>
+          </div>
+          <a
+            href="https://whatsapp.com/channel/cielosanto"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs py-2.5 px-5 rounded-xl transition-all shadow active:scale-95"
+          >
+            Unirme al Canal
+          </a>
+        </div>
+      </section>
+
+      {/* 4. CAMPAÑA DE SOSTÉN */}
       <CampanaDonacion />
 
-      {/* 4. MURO DE PETICIONES */}
+      {/* 5. MURO DE PETICIONES Y AGRADECIMIENTOS */}
       <section id="muro-oracion" className="py-20 px-4 max-w-4xl mx-auto w-full scroll-mt-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-serif font-bold text-slate-900 mb-3">Muro de Intenciones</h2>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-serif font-bold text-slate-900 mb-3">Muro de la Comunidad</h2>
           <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
             Tu petición puede formar parte de nuestra oración comunitaria semanal. Todos los domingos oramos juntos en YouTube por las intenciones anotadas en este santuario.
           </p>
+
+          {/* Botón de Guion Dominical para Carlos / Equipo */}
+          <div className="mt-4">
+            <button
+              onClick={() => setGuionModalOpen(true)}
+              className="inline-flex items-center gap-1.5 text-xs text-amber-800 bg-amber-100/70 hover:bg-amber-100 px-3.5 py-1.5 rounded-full font-medium transition-colors border border-amber-200"
+            >
+              <span>🎙️</span>
+              <span>Generar Guion Dominical para YouTube (Top oraciones)</span>
+            </button>
+          </div>
         </div>
 
-        {/* Formulario para agregar intención con opciones de privacidad */}
+        {/* Pestañas: Peticiones vs Agradecimientos */}
+        <div className="flex justify-center gap-3 mb-8">
+          <button
+            onClick={() => setTabMuro("peticiones")}
+            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
+              tabMuro === "peticiones"
+                ? "bg-slate-900 text-white shadow-md"
+                : "bg-white text-slate-600 hover:bg-stone-100 border border-stone-200"
+            }`}
+          >
+            🙏 Peticiones de Oración ({peticiones.length})
+          </button>
+          <button
+            onClick={() => setTabMuro("agradecimientos")}
+            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
+              tabMuro === "agradecimientos"
+                ? "bg-amber-700 text-white shadow-md"
+                : "bg-white text-slate-600 hover:bg-stone-100 border border-stone-200"
+            }`}
+          >
+            ✨ Testimonios y Agradecimientos ({agradecimientos.length})
+          </button>
+        </div>
+
+        {/* Formulario */}
         <div className="bg-amber-50/60 p-6 md:p-8 rounded-3xl border border-amber-200/60 mb-10 shadow-sm">
-          <h3 className="font-bold text-slate-900 mb-2 text-sm uppercase tracking-wide">¿Tienes una petición personal?</h3>
+          <h3 className="font-bold text-slate-900 mb-2 text-sm uppercase tracking-wide">
+            {tabMuro === "peticiones" ? "¿Tienes una petición personal?" : "Comparte tu testimonio o agradecimiento"}
+          </h3>
           
-          {/* Advertencia de privacidad y datos sensibles */}
           <div className="bg-white/80 p-3 rounded-xl border border-amber-200 text-xs text-amber-900 mb-4 flex items-start gap-2">
             <span className="text-base leading-none">🛡️</span>
             <span>
-              <strong>Cuidado de privacidad:</strong> Evita incluir información médica detallada, direcciones, teléfonos o nombres completos de terceros.
+              <strong>Cuidado de privacidad:</strong> Evita incluir información médica detallada, direcciones o teléfonos de terceros.
             </span>
           </div>
 
@@ -364,12 +450,16 @@ export default function Home() {
               rows={3} 
               value={peticionInput}
               onChange={(e) => setPeticionInput(e.target.value)}
-              placeholder="Escribe tu petición con sencillez aquí para que oremos por ti..." 
+              placeholder={
+                tabMuro === "peticiones"
+                  ? "Escribe tu petición con sencillez aquí para que oremos por ti..."
+                  : "Comparte cómo Dios te ha acompañado o escribe unas palabras de gratitud..."
+              }
               maxLength={500}
               className="w-full px-4 py-3 rounded-xl border border-stone-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-slate-800 text-sm bg-white"
             ></textarea>
 
-            {/* Captura de correo con consentimiento (opcional) */}
+            {/* Captura de correo con consentimiento */}
             <div className="bg-white/60 p-3 rounded-xl border border-stone-200 text-xs">
               <label className="flex items-center gap-2 cursor-pointer mb-2">
                 <input
@@ -404,6 +494,8 @@ export default function Home() {
                 <span>
                   {tipoPrivacidad === "privada"
                     ? "¡Tu intención privada ha sido recibida con respeto! Será orada confidencialmente."
+                    : tabMuro === "agradecimientos"
+                    ? "¡Gracias por compartir tu testimonio! Inspira la fe de toda la comunidad."
                     : "¡Tu petición ha sido recibida con amor! Nos unimos en fe contigo."}
                 </span>
               </div>
@@ -414,26 +506,29 @@ export default function Home() {
               disabled={isSubmitting}
               className="bg-slate-900 hover:bg-slate-800 active:scale-95 disabled:opacity-50 text-white font-medium py-3 px-6 rounded-xl transition-all text-sm self-end"
             >
-              {isSubmitting ? "Publicando..." : "Publicar Intención"}
+              {isSubmitting ? "Publicando..." : tabMuro === "agradecimientos" ? "Publicar Agradecimiento" : "Publicar Intención"}
             </button>
           </form>
         </div>
 
-        {/* Lista de Peticiones Públicas */}
+        {/* Lista de Peticiones o Agradecimientos */}
         <div className="space-y-4">
-          {peticiones.map((p) => (
+          {(tabMuro === "peticiones" ? peticiones : agradecimientos).map((p) => (
             <div key={p.id} className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col gap-3 transition-all">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-900 text-sm">{p.nombre}</span>
-                  <span className="text-[11px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full font-medium">
-                    {p.apoyos} personas orando
+                  <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+                    tabMuro === "agradecimientos" 
+                      ? "text-emerald-800 bg-emerald-50" 
+                      : "text-amber-700 bg-amber-50"
+                  }`}>
+                    {tabMuro === "agradecimientos" ? `Agradecimiento (${p.apoyos} amens)` : `${p.apoyos} personas orando`}
                   </span>
                 </div>
                 
-                {/* Botón reportar intención */}
                 <button
-                  onClick={() => handleReportar(p.id)}
+                  onClick={() => handleReportar(p.id, tabMuro === "agradecimientos")}
                   className="text-[11px] text-slate-400 hover:text-rose-600 transition-colors"
                   title="Reportar si contiene datos personales o contenido indebido"
                 >
@@ -445,26 +540,27 @@ export default function Home() {
 
               <div className="flex flex-wrap justify-between items-center gap-2 pt-2 border-t border-stone-100">
                 <button 
-                  onClick={() => handleApoyo(p.id)}
+                  onClick={() => handleApoyo(p.id, tabMuro === "agradecimientos")}
                   className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 ${
                     p.apoyado 
                       ? 'bg-amber-100 text-amber-800 cursor-default' 
                       : 'bg-stone-100 hover:bg-stone-200 text-slate-700'
                   }`}
                 >
-                  🤍 {p.apoyado ? 'Orando contigo' : 'Unirme en Oración'} ({p.apoyos})
+                  {tabMuro === "agradecimientos" ? '🕊️ Decir Amén' : '🤍 Unirme en Oración'} ({p.apoyos})
                 </button>
 
-                {/* Viralidad reflexiva de WhatsApp para la petición */}
                 <a
                   href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                    `🙏 Hoy me uní a una oración comunitaria por ${p.nombre} en Cielo Santo:\n"${p.peticion}"\n\nQuizás esta palabra también pueda acompañarte hoy:\nhttps://cielosanto.com/#muro-oracion`
+                    tabMuro === "agradecimientos"
+                      ? `✨ Hermoso testimonio de fe en Cielo Santo:\n"${p.peticion}" — ${p.nombre}\n\nhttps://cielosanto.com/#muro-oracion`
+                      : `🙏 Me uní a una oración comunitaria por ${p.nombre} en Cielo Santo:\n"${p.peticion}"\n\nQuizás esta palabra también pueda acompañarte hoy:\nhttps://cielosanto.com/#muro-oracion`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-slate-500 hover:text-emerald-700 flex items-center gap-1 transition-colors"
                 >
-                  <span>📲 Invitar a orar por esta intención</span>
+                  <span>📲 Compartir en WhatsApp</span>
                 </a>
               </div>
 
@@ -478,7 +574,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. NEWSLETTER GRATUITO: "UNA PALABRA DE ESPERANZA CADA MAÑANA" */}
+      {/* 6. NEWSLETTER GRATUITO */}
       <section className="py-14 bg-amber-50/70 border-y border-amber-200/60 px-5">
         <div className="max-w-2xl mx-auto text-center">
           <span className="text-amber-800 text-xs font-bold uppercase tracking-wider block mb-2">Comunidad Gratuita</span>
@@ -514,7 +610,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. ORACIONES EN YOUTUBE (3 CONTENIDOS DESTACADOS) */}
+      {/* 7. ORACIONES EN YOUTUBE */}
       <section className="py-16 bg-slate-900 text-white px-5">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-serif font-bold mb-3">Oraciones para acompañarte hoy</h2>
@@ -576,6 +672,16 @@ export default function Home() {
           </a>
         </div>
       </section>
+
+      {/* Reproductor de Audio Flotante */}
+      <AudioPlayer />
+
+      {/* Modal Guion Dominical para el creador */}
+      <ResumenSemanalModal
+        isOpen={guionModalOpen}
+        onClose={() => setGuionModalOpen(false)}
+        peticiones={peticiones}
+      />
 
     </main>
   );
