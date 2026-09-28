@@ -1,8 +1,6 @@
 name: Daily prayer email
 
 on:
-  schedule:
-    - cron: '0 10,11 * * *'
   workflow_dispatch:
 
 permissions:
