@@ -2,7 +2,7 @@ name: Daily prayer email
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 10,11 * * *'
   workflow_dispatch:
 
 permissions:
@@ -17,8 +17,17 @@ jobs:
           SITE_URL: ${{ secrets.CIELO_SANTO_SITE_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          test -n "$SITE_URL"
-          test -n "$CRON_SECRET"
+          if [[ -z "$SITE_URL" || -z "$CRON_SECRET" ]]; then
+            echo "::warning::Missing CIELO_SANTO_SITE_URL or CRON_SECRET repository secret; delivery skipped."
+            exit 0
+          fi
+
+          LOCAL_HOUR="$(TZ=America/Santiago date +'%H')"
+          if [[ "$LOCAL_HOUR" != "07" ]]; then
+            echo "Skipping because Santiago local time is $LOCAL_HOUR, not 07."
+            exit 0
+          fi
+
           curl --fail-with-body --silent --show-error \
             -H "Authorization: Bearer $CRON_SECRET" \
             "$SITE_URL/api/cron/oraciones"
