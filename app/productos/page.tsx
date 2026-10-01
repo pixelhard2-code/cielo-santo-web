@@ -147,67 +147,84 @@ export default async function Productos({ searchParams }: { searchParams: Promis
             </div>
           </div>
 
-          {/* PRODUCTO 2: Libro Digital de Salmos */}
+          {/* PRODUCTO 2: Libro Digital Semillas de Riqueza */}
           <div className="bg-white rounded-xl border border-stone-200 flex flex-col justify-between shadow-sm overflow-hidden">
-            <div className="relative h-44 w-full">
+            <div className="relative h-48 w-full bg-stone-950 overflow-hidden">
               <Image 
-                src="/bible-bg.webp" 
-                alt="30 días con los Salmos" 
+                src="/semillas-banner.webp" 
+                alt="Semillas de Riqueza - Cielo Santo" 
                 fill 
                 sizes="(max-width: 768px) 100vw, 500px" 
                 className="object-cover" 
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-5">
-                <span className="text-white text-xs font-semibold bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded">
-                  Edición digital en formato PDF
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end p-5">
+                <span className="text-white text-xs font-semibold bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded border border-white/20">
+                  Edición Digital en PDF + Cuaderno de Oración
                 </span>
               </div>
             </div>
 
             <div className="p-7 sm:p-8 flex-1 flex flex-col justify-between">
               <div>
-                <h3 className="text-2xl font-serif font-bold text-stone-900 mb-2">30 días con los Salmos</h3>
-                <p className="text-stone-600 text-sm mb-6 leading-relaxed">
-                  Treinta referencias bíblicas, reflexiones originales y oraciones breves para acompañarte en la mañana o al terminar el día.
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xs font-semibold text-[#b25310] bg-[#faf5ee] px-2.5 py-0.5 rounded border border-[#b25310]/20 inline-block">
+                    Devocional y Guía de Vida
+                  </span>
+                  <span className="text-xs font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    Pago Internacional
+                  </span>
+                </div>
+
+                <h3 className="text-2xl font-serif font-bold text-stone-900 mb-2">Semillas de Riqueza</h3>
+                <p className="text-stone-600 text-sm mb-5 leading-relaxed">
+                  Cultiva una vida de fe, gratitud y propósito en Dios. Seis encuentros con la Palabra y un camino devocional guiado de 30 días.
                 </p>
                 
-                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-3xl font-serif font-bold text-stone-900">$4.990</span>
-                  <span className="text-xs text-stone-500">CLP / pago único</span>
+                <div className="flex flex-col mb-6 bg-stone-50 p-3.5 rounded-xl border border-stone-200/80">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm font-semibold text-stone-900">Disponible para cualquier país</span>
+                    <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      Entrega digital inmediata
+                    </span>
+                  </div>
+                  <p className="text-xs text-stone-500 mt-1">
+                    Hotmart detecta tu país y adapta el precio a tu moneda local automáticamente.
+                  </p>
                 </div>
 
                 <ul className="space-y-3 mb-8 text-sm text-stone-700">
                   <li className="flex items-start gap-2.5">
                     <span className="text-stone-900 font-bold">·</span>
-                    <span>Descarga inmediata tras el pago y envío de respaldo a tu correo.</span>
+                    <span><strong>Guía Devocional (51 páginas)</strong> con reflexiones bíblicas, oraciones y aplicaciones prácticas diarias.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
                     <span className="text-stone-900 font-bold">·</span>
-                    <span>Treinta lecturas ordenadas para leer desde el teléfono o imprimir.</span>
+                    <span><strong>Cuaderno de Oración (15 páginas)</strong> complementario para registrar tus meditaciones y motivos de gratitud.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
                     <span className="text-stone-900 font-bold">·</span>
-                    <span>Tipografía amplia y descanso visual para leer en la cama.</span>
+                    <span>Descarga inmediata tras el pago y respaldo privado enviado a tu correo.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-stone-900 font-bold">·</span>
+                    <span>Pago seguro para cualquier país con tarjeta de crédito, débito, PayPal o medios locales.</span>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <CheckoutButton
-                  item={{
-                    id: 'devocional_30d',
-                    title: '30 días con los Salmos',
-                    subtitle: 'Devocional digital en PDF con 30 reflexiones de paz',
-                    priceDisplay: '$4.990 CLP único pago',
-                    type: 'devocional',
-                    amount: 4990,
-                    currency: 'CLP',
-                  }}
-                  className="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-5 rounded-lg transition-colors text-sm"
+                <a
+                  href="https://hotm.io/wwrOcBS"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#b25310] hover:bg-[#9a440a] active:scale-95 text-white font-medium py-3.5 px-5 rounded-lg transition-all text-sm flex items-center justify-center gap-2 shadow-sm text-center"
                 >
-                  Comprar libro digital
-                </CheckoutButton>
-                <p className="text-center text-[11px] text-stone-600 mt-2.5">Recibirás un enlace de descarga privado después de confirmar el pago.</p>
+                  <span>Comprar libro digital</span>
+                  <span aria-hidden="true" className="text-xs">↗</span>
+                </a>
+                <p className="text-center text-[11px] text-stone-500 mt-2.5">
+                  Se abrirá la pasarela de pago segura de Hotmart con entrega digital inmediata.
+                </p>
               </div>
             </div>
           </div>
@@ -222,14 +239,14 @@ export default async function Productos({ searchParams }: { searchParams: Promis
           <div className="bg-white p-5 rounded-xl border border-stone-200">
             <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Cómo recibo el devocional tras el pago?</h3>
             <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-              Después de confirmarse el pago, enviaremos a tu correo un enlace privado de descarga, válido durante 72 horas.
+              Inmediatamente tras confirmar el pago, recibirás acceso directo para descargar los libros en PDF (Guía devocional y Cuaderno de oración) y un correo con el enlace privado para volver a descargarlos cuando desees.
             </p>
           </div>
 
           <div className="bg-white p-5 rounded-xl border border-stone-200">
             <h3 className="font-semibold text-stone-900 text-sm mb-1.5">¿Qué medios de pago están disponibles?</h3>
             <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-              El medio de pago disponible para tu compra aparecerá antes de salir al proceso de pago. Los precios se cobran en pesos chilenos.
+              Para el libro <em>Semillas de Riqueza</em>, la pasarela de Hotmart admite compras desde cualquier país en tu moneda local, aceptando tarjetas de crédito, débito, PayPal y métodos locales (como Pix, Oxxo, Sencillito, etc. según tu país).
             </p>
           </div>
 
